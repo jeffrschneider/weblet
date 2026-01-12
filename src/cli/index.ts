@@ -9,6 +9,7 @@
 import { validateCommand } from "./commands/validate.ts";
 import { infoCommand } from "./commands/info.ts";
 import { initCommand } from "./commands/init.ts";
+import { runCommand } from "./commands/run.ts";
 
 // =============================================================================
 // Types
@@ -32,10 +33,10 @@ weblet - Weblet CLI
 Usage: weblet <command> [options]
 
 Commands:
+  run [path]          Run a weblet server
   validate <path>     Validate an APP.md manifest
   info <path>         Display manifest information
   init [path]         Create a new weblet
-  run <path>          Run a weblet (coming soon)
   vendor <package>    Vendor a dependency (coming soon)
   list [path]         List discovered weblets (coming soon)
 
@@ -44,7 +45,16 @@ Options:
   --version, -v       Show version
   --json              Output as JSON (where supported)
 
+Run Options:
+  --port <port>       Port to run on (default: 3000)
+  --host <hostname>   Hostname to bind (default: localhost)
+  --open, -o          Open browser on start
+  --prod              Run in production mode
+  --no-spa            Disable SPA fallback
+
 Examples:
+  weblet run ./my-app
+  weblet run ./my-app --port 8080 --open
   weblet validate ./my-app
   weblet info ./my-app --json
   weblet init my-new-app --runtime bun
@@ -145,8 +155,7 @@ async function main(): Promise<void> {
         break;
 
       case "run":
-        printError("'run' command not yet implemented. Coming in Phase 3.");
-        process.exit(1);
+        await runCommand(args, flags);
         break;
 
       case "vendor":
