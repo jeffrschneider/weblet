@@ -2,8 +2,8 @@
  * Freecell game state and logic
  */
 
+import type { Card } from "./cards.ts";
 import {
-  Card,
   createDeck,
   shuffleDeck,
   canStackOnTableau,
@@ -229,6 +229,26 @@ export function findAutoMove(
   }
 
   return null;
+}
+
+export function findEmptyFreeCell(state: GameState): Location | null {
+  for (let i = 0; i < 4; i++) {
+    if (state.freeCells[i] === null) {
+      return { type: "freecell", index: i };
+    }
+  }
+  return null;
+}
+
+export function getTopCard(state: GameState, location: Location): Card | null {
+  if (location.type === "freecell") {
+    return state.freeCells[location.index];
+  }
+  if (location.type === "foundation") {
+    return state.foundations[location.index];
+  }
+  const column = state.tableau[location.column];
+  return column.length > 0 ? column[column.length - 1] : null;
 }
 
 export function isWon(state: GameState): boolean {

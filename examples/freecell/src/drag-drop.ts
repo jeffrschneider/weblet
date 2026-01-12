@@ -2,7 +2,8 @@
  * Drag and drop handling for Freecell
  */
 
-import { GameState, Location, moveCards, getMovableCards } from "./game.ts";
+import type { GameState, Location } from "./game.ts";
+import { moveCards, getMovableCards } from "./game.ts";
 import { renderGame, clearHighlights } from "./ui.ts";
 
 let draggedCards: HTMLElement[] = [];

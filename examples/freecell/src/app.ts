@@ -2,15 +2,15 @@
  * Freecell App - Main entry point
  */
 
+import type { GameState, Location } from "./game.ts";
 import {
-  GameState,
   createGame,
   moveCards,
   undo,
   isWon,
   findHint,
   findAutoMove,
-  Location,
+  findEmptyFreeCell,
 } from "./game.ts";
 import {
   renderGame,
@@ -31,12 +31,213 @@ import {
   loadPreferences,
   savePreferences,
 } from "./storage.ts";
-import { initI18n, setLocale, saveLocalePreference, Locale } from "./i18n.ts";
+import type { Locale } from "./i18n.ts";
+import { initI18n, setLocale, saveLocalePreference } from "./i18n.ts";
 
 // Game state
 let state: GameState;
 let timerInterval: number | null = null;
 let selectedLocation: Location | null = null;
+let isAnimating = false;
+
+// Animation duration in ms
+const ANIMATION_DURATION = 250;
+
+/**
+ * Get the DOM element for a location
+ */
+function getElementForLocation(location: Location): HTMLElement | null {
+  if (location.type === "freecell") {
+    return document.getElementById(`free-${location.index}`);
+  }
+  if (location.type === "foundation") {
+    return document.getElementById(`foundation-${location.index}`);
+  }
+  return document.getElementById(`column-${location.column}`);
+}
+
+/**
+ * Animate a card moving from source to destination
+ */
+function animateCardMove(
+  cardElement: HTMLElement,
+  toLocation: Location
+): Promise<void> {
+  return new Promise((resolve) => {
+    const destElement = getElementForLocation(toLocation);
+    if (!destElement) {
+      resolve();
+      return;
+    }
+
+    const cardRect = cardElement.getBoundingClientRect();
+    const destRect = destElement.getBoundingClientRect();
+
+    // Calculate destination position
+    let destTop = destRect.top;
+    let destLeft = destRect.left;
+
+    // For tableau columns, stack cards
+    if (toLocation.type === "tableau") {
+      const existingCards = destElement.querySelectorAll(".card");
+      destTop += existingCards.length * 35;
+    }
+
+    // Calculate the translation needed
+    const deltaX = destLeft - cardRect.left;
+    const deltaY = destTop - cardRect.top;
+
+    // Apply animation
+    cardElement.style.transition = `transform ${ANIMATION_DURATION}ms ease-out`;
+    cardElement.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+    cardElement.style.zIndex = "1000";
+
+    setTimeout(() => {
+      cardElement.style.transition = "";
+      cardElement.style.transform = "";
+      cardElement.style.zIndex = "";
+      resolve();
+    }, ANIMATION_DURATION);
+  });
+}
+
+/**
+ * Perform an animated move and update game state
+ */
+async function animatedMove(from: Location, to: Location): Promise<boolean> {
+  // Find the card element to animate
+  let cardElement: HTMLElement | null = null;
+
+  if (from.type === "freecell") {
+    const cell = document.getElementById(`free-${from.index}`);
+    cardElement = cell?.querySelector(".card") as HTMLElement;
+  } else if (from.type === "tableau") {
+    const column = document.getElementById(`column-${from.column}`);
+    cardElement = column?.querySelector(".card:last-child") as HTMLElement;
+  }
+
+  if (cardElement) {
+    await animateCardMove(cardElement, to);
+  }
+
+  // Perform the actual move
+  const result = moveCards(state, from, to);
+  if (result.success) {
+    renderGame(state);
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Try to cascade cards to foundation from a tableau column
+ * Returns true if any moves were made
+ */
+async function cascadeToFoundation(column: number): Promise<boolean> {
+  let moved = false;
+
+  while (true) {
+    const from: Location = { type: "tableau", column };
+    const foundationDest = findAutoMove(state, from);
+
+    if (foundationDest) {
+      const success = await animatedMove(from, foundationDest);
+      if (success) {
+        moved = true;
+        // Small delay between cascade moves
+        await new Promise((r) => setTimeout(r, 50));
+        continue;
+      }
+    }
+    break;
+  }
+
+  return moved;
+}
+
+/**
+ * Handle smart card click with cascade logic
+ */
+async function handleSmartCardClick(element: HTMLElement): Promise<void> {
+  if (isAnimating) return;
+
+  const location = getLocationFromElement(element);
+  if (!location) return;
+
+  // If we have a selected card, try to move to this location
+  if (selectedLocation) {
+    isAnimating = true;
+    const result = moveCards(state, selectedLocation, location);
+    if (result.success) {
+      renderGame(state);
+      onMove();
+    }
+    clearHighlights();
+    selectedLocation = null;
+    isAnimating = false;
+    return;
+  }
+
+  // Only handle tableau cards for smart auto-move
+  if (location.type !== "tableau") {
+    // For free cell cards, just select them
+    selectedLocation = location;
+    const cardId = element.dataset.cardId;
+    if (cardId) {
+      highlightCard(cardId);
+    }
+    return;
+  }
+
+  // Check if this is the top card of the column
+  const column = state.tableau[location.column];
+  const cardIndex = location.cardIndex ?? column.length - 1;
+  if (cardIndex !== column.length - 1) {
+    // Not the top card, just select it
+    selectedLocation = location;
+    const cardId = element.dataset.cardId;
+    if (cardId) {
+      highlightCard(cardId);
+    }
+    return;
+  }
+
+  isAnimating = true;
+
+  // Try to move to foundation first
+  const foundationDest = findAutoMove(state, location);
+  if (foundationDest) {
+    const success = await animatedMove(location, foundationDest);
+    if (success) {
+      // Cascade: check if the new top card can also go to foundation
+      await cascadeToFoundation(location.column);
+      onMove();
+      isAnimating = false;
+      return;
+    }
+  }
+
+  // Can't go to foundation, try free cell
+  const freeCellDest = findEmptyFreeCell(state);
+  if (freeCellDest) {
+    const success = await animatedMove(location, freeCellDest);
+    if (success) {
+      // After moving to free cell, check if the new top card can go to foundation
+      await cascadeToFoundation(location.column);
+      onMove();
+      isAnimating = false;
+      return;
+    }
+  }
+
+  // Can't auto-move, just select the card
+  isAnimating = false;
+  selectedLocation = location;
+  const cardId = element.dataset.cardId;
+  if (cardId) {
+    highlightCard(cardId);
+  }
+}
 
 // Initialize game
 function init(): void {
@@ -116,55 +317,53 @@ function handleHint(): void {
 }
 
 function handleCardClick(element: HTMLElement): void {
-  const location = getLocationFromElement(element);
-  if (!location) return;
-
-  if (selectedLocation) {
-    // Try to move to this location
-    const result = moveCards(state, selectedLocation, location);
-    if (result.success) {
-      renderGame(state);
-      onMove();
-    }
-    clearHighlights();
-    selectedLocation = null;
-  } else {
-    // Select this card
-    selectedLocation = location;
-    const cardId = element.dataset.cardId;
-    if (cardId) {
-      highlightCard(cardId);
-    }
-  }
+  // Use the smart click handler with cascade logic
+  handleSmartCardClick(element);
 }
 
-function handleCellClick(cell: HTMLElement): void {
+async function handleCellClick(cell: HTMLElement): Promise<void> {
+  if (isAnimating) return;
+
   const location = getLocationFromCell(cell);
   if (!location) return;
 
   if (selectedLocation) {
-    const result = moveCards(state, selectedLocation, location);
-    if (result.success) {
-      renderGame(state);
+    isAnimating = true;
+    const success = await animatedMove(selectedLocation, location);
+    if (success) {
+      // If we moved to a tableau column from another tableau, cascade from source
+      if (selectedLocation.type === "tableau") {
+        await cascadeToFoundation(selectedLocation.column);
+      }
       onMove();
     }
     clearHighlights();
     selectedLocation = null;
+    isAnimating = false;
   }
 }
 
-function handleDoubleClick(element: HTMLElement): void {
+async function handleDoubleClick(element: HTMLElement): Promise<void> {
+  if (isAnimating) return;
+
   const location = getLocationFromElement(element);
   if (!location) return;
 
+  isAnimating = true;
+
   const autoMove = findAutoMove(state, location);
   if (autoMove) {
-    const result = moveCards(state, location, autoMove);
-    if (result.success) {
-      renderGame(state);
+    const success = await animatedMove(location, autoMove);
+    if (success) {
+      // If it was a tableau card, cascade
+      if (location.type === "tableau") {
+        await cascadeToFoundation(location.column);
+      }
       onMove();
     }
   }
+
+  isAnimating = false;
 }
 
 function setupEventListeners(): void {

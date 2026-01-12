@@ -40,6 +40,16 @@ Bun.serve({
     const file = Bun.file(filePath);
 
     if (await file.exists()) {
+      // Transpile TypeScript files
+      if (path.endsWith(".ts") || path.endsWith(".tsx")) {
+        const transpiler = new Bun.Transpiler({ loader: "ts" });
+        const source = await file.text();
+        const result = transpiler.transformSync(source);
+        return new Response(result, {
+          headers: { "Content-Type": "text/javascript; charset=utf-8" },
+        });
+      }
+
       return new Response(file, {
         headers: { "Content-Type": getMimeType(path) },
       });

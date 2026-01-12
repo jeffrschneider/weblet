@@ -13,13 +13,16 @@ Bun.serve({
     const url = new URL(req.url);
     const path = url.pathname;
 
-    // Serve TypeScript files as JavaScript
-    if (path.endsWith(".ts")) {
+    // Serve TypeScript files as JavaScript (transpiled)
+    if (path.endsWith(".ts") || path.endsWith(".tsx")) {
       const filePath = `.${path}`;
       const file = Bun.file(filePath);
 
       if (await file.exists()) {
-        return new Response(file, {
+        const transpiler = new Bun.Transpiler({ loader: "ts" });
+        const source = await file.text();
+        const result = transpiler.transformSync(source);
+        return new Response(result, {
           headers: { "Content-Type": "text/javascript; charset=utf-8" },
         });
       }
@@ -43,15 +46,20 @@ Bun.serve({
       }
     }
 
-    // Serve src files
+    // Serve src files (TypeScript transpiled)
     if (path.startsWith("/src/")) {
       const file = Bun.file(`.${path}`);
       if (await file.exists()) {
-        const contentType = path.endsWith(".ts")
-          ? "text/javascript; charset=utf-8"
-          : "application/octet-stream";
+        if (path.endsWith(".ts") || path.endsWith(".tsx")) {
+          const transpiler = new Bun.Transpiler({ loader: "ts" });
+          const source = await file.text();
+          const result = transpiler.transformSync(source);
+          return new Response(result, {
+            headers: { "Content-Type": "text/javascript; charset=utf-8" },
+          });
+        }
         return new Response(file, {
-          headers: { "Content-Type": contentType },
+          headers: { "Content-Type": "application/octet-stream" },
         });
       }
     }

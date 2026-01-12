@@ -2,8 +2,9 @@
  * UI rendering for Freecell
  */
 
-import { Card, SUIT_SYMBOLS, RANK_NAMES, isRed } from "./cards.ts";
-import { GameState, Location } from "./game.ts";
+import type { Card } from "./cards.ts";
+import { SUIT_SYMBOLS, RANK_NAMES, isRed } from "./cards.ts";
+import type { GameState, Location } from "./game.ts";
 
 export function createCardElement(card: Card): HTMLElement {
   const el = document.createElement("div");
@@ -61,7 +62,7 @@ export function renderGame(state: GameState): void {
     const cards = state.tableau[col];
     cards.forEach((card, idx) => {
       const cardEl = createCardElement(card);
-      cardEl.style.top = `${idx * 25}px`;
+      cardEl.style.top = `${idx * 35}px`;
       cardEl.dataset.columnIndex = String(idx);
       column.appendChild(cardEl);
     });

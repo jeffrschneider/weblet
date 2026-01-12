@@ -3,7 +3,7 @@
  * Saves game state, statistics, and preferences
  */
 
-import { GameState } from "./game.ts";
+import type { GameState } from "./game.ts";
 
 const STORAGE_PREFIX = "freecell_";
 
