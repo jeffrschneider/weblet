@@ -7,7 +7,28 @@
       "Bash(git fetch:*)",
       "Bash(git checkout:*)",
       "Bash(git add:*)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial project structure\n\n- Add specifications/ directory for versioned open specification documents\n- Add specs/ directory for spec-driven development requirements\n- Add .gitignore for temp files\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial project structure\n\n- Add specifications/ directory for versioned open specification documents\n- Add specs/ directory for spec-driven development requirements\n- Add .gitignore for temp files\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd reference implementation specs\n\nSix spec-driven development specifications for building the Weblet\nreference implementation:\n\n- cli.spec.md: CLI tool, commands, APP.md parsing, discovery\n- runtime.spec.md: Bun server, static serving, API routes\n- dependencies.spec.md: URL imports, vendoring, install strategy\n- storage.spec.md: Ephemeral and persistent storage management\n- agent-context.spec.md: Agent Context API for agent-app communication\n- examples.spec.md: Reference weblet implementations\n\nEach spec includes:\n- Functional and non-functional requirements\n- Interface/API definitions\n- Behavior descriptions\n- Error handling\n- Acceptance criteria\n- Test scenarios\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)",
+      "Bash(bun install)",
+      "Bash(npm install)",
+      "Bash(where bun)",
+      "Bash(npm run test:node:*)",
+      "Bash(npx tsx:*)",
+      "Bash(npm run test:storage:node:*)",
+      "Bash(npm run test:deps:node:*)",
+      "Bash(npm run test:cli:node:*)",
+      "Bash(npm run test:runtime:node:*)",
+      "Bash(node -e:*)",
+      "Bash(npm run test:agent:node:*)",
+      "Bash(npm test)",
+      "Bash(powershell -Command \"irm bun.sh/install.ps1 | iex\")",
+      "Bash($env:PATH = \"C:\\\\Users\\\\jeffr\\\\.bun\\\\bin;$env:PATH\")",
+      "Bash(bun test:*)",
+      "Bash(C:Usersjeffr.bunbinbun.exe test)",
+      "Bash(\"/c/Users/jeffr/.bun/bin/bun.exe\" test)"
     ]
   }
 }
