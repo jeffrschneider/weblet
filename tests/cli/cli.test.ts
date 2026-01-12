@@ -230,6 +230,72 @@ async function runTests() {
       assert(result.exitCode !== 0, "Should fail if APP.md exists");
     });
 
+    // List Command
+    console.log("\nlist command:");
+
+    await test("lists weblets in directory", async () => {
+      // Create multiple weblets
+      const listDir = join(tempDir, "list-test");
+      await mkdir(listDir, { recursive: true });
+
+      const app1 = join(listDir, "app1");
+      const app2 = join(listDir, "app2");
+      await mkdir(app1, { recursive: true });
+      await mkdir(app2, { recursive: true });
+      await writeFile(join(app1, "APP.md"), VALID_APP_MD);
+      await writeFile(join(app2, "APP.md"), VALID_APP_MD.replace("test-app", "app-two"));
+
+      const result = await runCli(`list ${listDir}`);
+      assert(result.stdout.includes("test-app") || result.stdout.includes("2"), "Should list weblets");
+      assertEqual(result.exitCode, 0);
+    });
+
+    await test("--json outputs JSON", async () => {
+      const listDir = join(tempDir, "list-json-test");
+      await mkdir(listDir, { recursive: true });
+
+      const app1 = join(listDir, "myapp");
+      await mkdir(app1, { recursive: true });
+      await writeFile(join(app1, "APP.md"), VALID_APP_MD);
+
+      const result = await runCli(`list ${listDir} --json`);
+      const json = JSON.parse(result.stdout);
+      assert(typeof json.count === "number", "Should have count");
+      assert(Array.isArray(json.weblets), "Should have weblets array");
+    });
+
+    await test("shows message when no weblets found", async () => {
+      const emptyDir = join(tempDir, "empty-dir");
+      await mkdir(emptyDir, { recursive: true });
+
+      const result = await runCli(`list ${emptyDir}`);
+      assert(result.stdout.includes("No weblets") || result.stdout.includes("0"), "Should show no weblets message");
+    });
+
+    // Vendor Command
+    console.log("\nvendor command:");
+
+    await test("shows help without arguments", async () => {
+      const result = await runCli("vendor");
+      assert(result.exitCode !== 0, "Should fail without args");
+      assert(
+        result.stderr.includes("No package") || result.stdout.includes("Usage"),
+        "Should show usage info"
+      );
+    });
+
+    await test("--list shows vendored packages", async () => {
+      const vendorDir = join(tempDir, "vendor-list-test");
+      await mkdir(vendorDir, { recursive: true });
+
+      const result = await runCli(`vendor --list --dir ${join(vendorDir, "vendor")}`);
+      // Should succeed even with no packages
+      assert(
+        result.stdout.includes("No vendor") || result.stdout.includes("vendored") || result.exitCode === 0,
+        "Should handle empty vendor"
+      );
+    });
+
     // Unknown Command
     console.log("\nerror handling:");
 

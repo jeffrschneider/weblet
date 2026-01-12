@@ -10,6 +10,8 @@ import { validateCommand } from "./commands/validate.ts";
 import { infoCommand } from "./commands/info.ts";
 import { initCommand } from "./commands/init.ts";
 import { runCommand } from "./commands/run.ts";
+import { vendorCommand } from "./commands/vendor.ts";
+import { listCommand } from "./commands/list.ts";
 
 // =============================================================================
 // Types
@@ -37,8 +39,8 @@ Commands:
   validate <path>     Validate an APP.md manifest
   info <path>         Display manifest information
   init [path]         Create a new weblet
-  vendor <package>    Vendor a dependency (coming soon)
-  list [path]         List discovered weblets (coming soon)
+  vendor <package>    Vendor a dependency from CDN
+  list [path]         List discovered weblets
 
 Options:
   --help, -h          Show help
@@ -52,12 +54,24 @@ Run Options:
   --prod              Run in production mode
   --no-spa            Disable SPA fallback
 
+Vendor Options:
+  --dir <path>        Vendor directory (default: vendor)
+  --cdn <url>         CDN to use (default: https://esm.sh)
+  --list, -l          List vendored packages
+
+List Options:
+  --recursive, -r     Search recursively
+  --depth <n>         Max depth for recursive search
+  --all, -a           Include invalid weblets
+
 Examples:
   weblet run ./my-app
   weblet run ./my-app --port 8080 --open
   weblet validate ./my-app
   weblet info ./my-app --json
   weblet init my-new-app --runtime bun
+  weblet vendor lodash@4.17.21
+  weblet list --recursive
 `.trim();
 
 // =============================================================================
@@ -159,13 +173,13 @@ async function main(): Promise<void> {
         break;
 
       case "vendor":
-        printError("'vendor' command not yet implemented. Coming in Phase 3.");
-        process.exit(1);
+        await vendorCommand(args, flags);
         break;
 
       case "list":
-        printError("'list' command not yet implemented. Coming in Phase 3.");
-        process.exit(1);
+      case "ls":
+      case "discover":
+        await listCommand(args, flags);
         break;
 
       default:
