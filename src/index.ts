@@ -6,3 +6,9 @@
 
 // Parser module
 export * from "./parser/index.ts";
+
+// Storage module
+export * from "./storage/index.ts";
+
+// Dependencies module
+export * from "./dependencies/index.ts";
