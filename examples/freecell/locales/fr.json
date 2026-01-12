@@ -1,0 +1,17 @@
+{
+  "title": "Freecell",
+  "new_game": "Nouvelle Partie",
+  "restart": "Recommencer",
+  "undo": "Annuler",
+  "hint": "Indice",
+  "moves": "Coups",
+  "time": "Temps",
+  "you_win": "Vous Avez Gagne!",
+  "congratulations": "Felicitations! Vous avez termine le jeu.",
+  "final_moves": "Coups",
+  "final_time": "Temps",
+  "play_again": "Rejouer",
+  "free_cell": "Cellule Libre",
+  "foundation": "Fondation",
+  "column": "Colonne"
+}

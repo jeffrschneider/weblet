@@ -1,0 +1,17 @@
+{
+  "title": "Freecell",
+  "new_game": "Nuevo Juego",
+  "restart": "Reiniciar",
+  "undo": "Deshacer",
+  "hint": "Pista",
+  "moves": "Movimientos",
+  "time": "Tiempo",
+  "you_win": "Ganaste!",
+  "congratulations": "Felicitaciones! Completaste el juego.",
+  "final_moves": "Movimientos",
+  "final_time": "Tiempo",
+  "play_again": "Jugar de Nuevo",
+  "free_cell": "Celda Libre",
+  "foundation": "Fundacion",
+  "column": "Columna"
+}

@@ -1,0 +1,369 @@
+/* Freecell Styles */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg-color: #0d5c1e;
+  --header-bg: #094716;
+  --cell-bg: rgba(0, 0, 0, 0.2);
+  --card-bg: white;
+  --card-red: #dc2626;
+  --card-black: #1f2937;
+  --text-color: white;
+  --accent-color: #fbbf24;
+  --highlight-color: #3b82f6;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Header */
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background: var(--header-bg);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.game-logo {
+  width: 32px;
+  height: 32px;
+}
+
+.game-header h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.header-center {
+  display: flex;
+  gap: 2rem;
+  font-size: 0.9rem;
+}
+
+.stat {
+  opacity: 0.8;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  transition: background 0.15s ease;
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.btn:active {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-primary {
+  background: var(--highlight-color);
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+}
+
+.lang-select {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.lang-select option {
+  color: black;
+}
+
+/* Game Board */
+.game-board {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1.5rem;
+}
+
+.top-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.free-cells,
+.foundations {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.cell {
+  width: 80px;
+  height: 112px;
+  border-radius: 8px;
+  background: var(--cell-bg);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.cell.drag-over {
+  border-color: var(--accent-color);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.cell.hint {
+  border-color: var(--highlight-color);
+  box-shadow: 0 0 10px var(--highlight-color);
+}
+
+.foundation {
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Tableau */
+.tableau {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.column {
+  width: 80px;
+  min-height: 112px;
+  position: relative;
+  border-radius: 8px;
+  background: var(--cell-bg);
+  border: 2px solid transparent;
+}
+
+.column.drag-over {
+  border-color: var(--accent-color);
+}
+
+.column.hint {
+  border-color: var(--highlight-color);
+  box-shadow: 0 0 10px var(--highlight-color);
+}
+
+/* Cards */
+.card {
+  width: 80px;
+  height: 112px;
+  border-radius: 8px;
+  background: var(--card-bg);
+  position: absolute;
+  left: 0;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  user-select: none;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+.card.selected {
+  box-shadow: 0 0 0 3px var(--highlight-color), 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 101;
+}
+
+.card.dragging {
+  opacity: 0.7;
+  transform: rotate(3deg);
+}
+
+.card.red {
+  color: var(--card-red);
+}
+
+.card.black {
+  color: var(--card-black);
+}
+
+.card-corner {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.card-corner .rank {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.card-corner .suit {
+  font-size: 0.875rem;
+}
+
+.top-left {
+  top: 4px;
+  left: 6px;
+}
+
+.bottom-right {
+  bottom: 4px;
+  right: 6px;
+  transform: rotate(180deg);
+}
+
+.card-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.5rem;
+}
+
+/* Free cell and foundation cards */
+.free-cell .card,
+.foundation .card {
+  position: relative;
+  top: 0;
+}
+
+/* Win Dialog */
+.dialog {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.dialog[hidden] {
+  display: none;
+}
+
+.dialog-content {
+  background: white;
+  color: #1f2937;
+  padding: 2rem 3rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+}
+
+.dialog-content h2 {
+  font-size: 2rem;
+  color: var(--bg-color);
+  margin-bottom: 1rem;
+}
+
+.dialog-content p {
+  margin-bottom: 0.5rem;
+  color: #6b7280;
+}
+
+.dialog-content .btn {
+  margin-top: 1.5rem;
+  color: white;
+}
+
+/* Accessibility: High Contrast */
+.high-contrast {
+  --bg-color: #000;
+  --header-bg: #111;
+  --cell-bg: #222;
+  --card-bg: #fff;
+  --card-red: #f00;
+  --card-black: #000;
+}
+
+.high-contrast .card {
+  border: 2px solid #000;
+}
+
+/* Accessibility: Reduced Motion */
+.reduced-motion .card,
+.reduced-motion .btn {
+  transition: none;
+}
+
+/* Focus styles for keyboard navigation */
+.card:focus,
+.cell:focus,
+.column:focus {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .game-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .header-center {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cell,
+  .column,
+  .card {
+    width: 60px;
+    height: 84px;
+  }
+
+  .card-center {
+    font-size: 1.5rem;
+  }
+
+  .card-corner .rank {
+    font-size: 0.75rem;
+  }
+
+  .card-corner .suit {
+    font-size: 0.625rem;
+  }
+}

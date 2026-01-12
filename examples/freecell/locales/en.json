@@ -1,0 +1,17 @@
+{
+  "title": "Freecell",
+  "new_game": "New Game",
+  "restart": "Restart",
+  "undo": "Undo",
+  "hint": "Hint",
+  "moves": "Moves",
+  "time": "Time",
+  "you_win": "You Win!",
+  "congratulations": "Congratulations! You completed the game.",
+  "final_moves": "Moves",
+  "final_time": "Time",
+  "play_again": "Play Again",
+  "free_cell": "Free Cell",
+  "foundation": "Foundation",
+  "column": "Column"
+}

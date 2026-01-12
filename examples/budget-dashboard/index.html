@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Dashboard - Weblet Example</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <div id="app" class="dashboard">
+    <!-- Header -->
+    <header class="header">
+      <h1>Budget Dashboard</h1>
+      <div class="header-actions">
+        <select id="chart-type" class="select" aria-label="Chart type">
+          <option value="bar">Bar Chart</option>
+          <option value="line">Line Chart</option>
+          <option value="pie">Pie Chart</option>
+        </select>
+        <button id="btn-export" class="btn">Export Report</button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Upload Section (shown when no data) -->
+      <section id="upload-section" class="upload-section">
+        <div class="upload-card">
+          <div class="upload-icon">📊</div>
+          <h2>No Expense Data</h2>
+          <p>Upload a CSV or JSON file to analyze your expenses, or use sample data to explore.</p>
+          <div class="upload-actions">
+            <label class="btn btn-primary">
+              Upload File
+              <input type="file" id="file-input" accept=".csv,.json" hidden>
+            </label>
+            <button id="btn-sample" class="btn btn-outline">Use Sample Data</button>
+          </div>
+          <p class="upload-hint">
+            <strong>CSV format:</strong> date,amount,category,description<br>
+            <strong>JSON format:</strong> Array of expense objects
+          </p>
+        </div>
+      </section>
+
+      <!-- Dashboard Section (shown when data loaded) -->
+      <section id="dashboard-section" class="dashboard-section" hidden>
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+          <div class="summary-card">
+            <span class="card-label">Total Expenses</span>
+            <span class="card-value" id="total-expenses">$0.00</span>
+          </div>
+          <div class="summary-card">
+            <span class="card-label">Average per Day</span>
+            <span class="card-value" id="avg-daily">$0.00</span>
+          </div>
+          <div class="summary-card">
+            <span class="card-label">Top Category</span>
+            <span class="card-value" id="top-category">-</span>
+          </div>
+          <div class="summary-card">
+            <span class="card-label">Transactions</span>
+            <span class="card-value" id="transaction-count">0</span>
+          </div>
+        </div>
+
+        <!-- Chart Container -->
+        <div class="chart-container">
+          <canvas id="main-chart"></canvas>
+        </div>
+
+        <!-- Expense List -->
+        <div class="expense-list">
+          <div class="list-header">
+            <h3>Recent Expenses</h3>
+            <button id="btn-clear" class="btn btn-small">Clear Data</button>
+          </div>
+          <table class="expense-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="expense-tbody">
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Budget Modal -->
+    <div id="budget-modal" class="modal" hidden>
+      <div class="modal-content">
+        <h3>Set Budget for <span id="budget-category"></span></h3>
+        <input type="number" id="budget-amount" placeholder="Enter budget amount" class="input">
+        <div class="modal-actions">
+          <button id="btn-cancel-budget" class="btn">Cancel</button>
+          <button id="btn-save-budget" class="btn btn-primary">Save Budget</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flag Modal -->
+    <div id="flag-modal" class="modal" hidden>
+      <div class="modal-content">
+        <h3>Flag Expense</h3>
+        <p id="flag-expense-info"></p>
+        <textarea id="flag-reason" placeholder="Reason for flagging..." class="textarea"></textarea>
+        <div class="modal-actions">
+          <button id="btn-cancel-flag" class="btn">Cancel</button>
+          <button id="btn-submit-flag" class="btn btn-warning">Flag Expense</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "chart.js": "https://esm.sh/chart.js@4.4.0"
+    }
+  }
+  </script>
+  <script type="module" src="/src/app.ts"></script>
+</body>
+</html>

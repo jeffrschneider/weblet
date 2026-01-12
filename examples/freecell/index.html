@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Freecell - Weblet Example</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+</head>
+<body>
+  <div id="app" class="game-container">
+    <!-- Header -->
+    <header class="game-header">
+      <div class="header-left">
+        <img src="/assets/icon.svg" alt="" class="game-logo">
+        <h1 data-i18n="title">Freecell</h1>
+      </div>
+      <div class="header-center">
+        <span class="stat" data-i18n="moves">Moves</span>: <span id="move-count">0</span>
+        <span class="stat" data-i18n="time">Time</span>: <span id="timer">0:00</span>
+      </div>
+      <div class="header-right">
+        <button id="btn-new" class="btn" data-i18n="new_game">New Game</button>
+        <button id="btn-restart" class="btn" data-i18n="restart">Restart</button>
+        <button id="btn-undo" class="btn" data-i18n="undo">Undo</button>
+        <button id="btn-hint" class="btn" data-i18n="hint">Hint</button>
+        <select id="lang-select" class="lang-select" aria-label="Language">
+          <option value="en">English</option>
+          <option value="es">Espanol</option>
+          <option value="fr">Francais</option>
+        </select>
+      </div>
+    </header>
+
+    <!-- Game Board -->
+    <main class="game-board" role="application" aria-label="Freecell game board">
+      <!-- Top Row: Free Cells and Foundations -->
+      <div class="top-row">
+        <div class="free-cells">
+          <div class="cell free-cell" id="free-0" tabindex="0" role="button" aria-label="Free cell 1"></div>
+          <div class="cell free-cell" id="free-1" tabindex="0" role="button" aria-label="Free cell 2"></div>
+          <div class="cell free-cell" id="free-2" tabindex="0" role="button" aria-label="Free cell 3"></div>
+          <div class="cell free-cell" id="free-3" tabindex="0" role="button" aria-label="Free cell 4"></div>
+        </div>
+        <div class="foundations">
+          <div class="cell foundation" id="foundation-0" tabindex="0" role="button" aria-label="Foundation hearts"></div>
+          <div class="cell foundation" id="foundation-1" tabindex="0" role="button" aria-label="Foundation diamonds"></div>
+          <div class="cell foundation" id="foundation-2" tabindex="0" role="button" aria-label="Foundation clubs"></div>
+          <div class="cell foundation" id="foundation-3" tabindex="0" role="button" aria-label="Foundation spades"></div>
+        </div>
+      </div>
+
+      <!-- Tableau Columns -->
+      <div class="tableau">
+        <div class="column" id="column-0" tabindex="0" role="button" aria-label="Column 1"></div>
+        <div class="column" id="column-1" tabindex="0" role="button" aria-label="Column 2"></div>
+        <div class="column" id="column-2" tabindex="0" role="button" aria-label="Column 3"></div>
+        <div class="column" id="column-3" tabindex="0" role="button" aria-label="Column 4"></div>
+        <div class="column" id="column-4" tabindex="0" role="button" aria-label="Column 5"></div>
+        <div class="column" id="column-5" tabindex="0" role="button" aria-label="Column 6"></div>
+        <div class="column" id="column-6" tabindex="0" role="button" aria-label="Column 7"></div>
+        <div class="column" id="column-7" tabindex="0" role="button" aria-label="Column 8"></div>
+      </div>
+    </main>
+
+    <!-- Win Dialog -->
+    <div id="win-dialog" class="dialog" role="dialog" aria-labelledby="win-title" hidden>
+      <div class="dialog-content">
+        <h2 id="win-title" data-i18n="you_win">You Win!</h2>
+        <p data-i18n="congratulations">Congratulations! You completed the game.</p>
+        <p><span data-i18n="final_moves">Moves</span>: <span id="final-moves">0</span></p>
+        <p><span data-i18n="final_time">Time</span>: <span id="final-time">0:00</span></p>
+        <button id="btn-play-again" class="btn btn-primary" data-i18n="play_again">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/app.ts"></script>
+</body>
+</html>
