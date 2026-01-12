@@ -1,2 +1,23 @@
 # Temp files
 tmpclaude-*
+
+# Dependencies
+node_modules/
+bun.lockb
+
+# Build output
+dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Weblet runtime directories
+.data/
+.userdata/
