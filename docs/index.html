@@ -5,26 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weblet - Self-contained web apps for AI agents</title>
   <meta name="description" content="Build portable web apps that work with AI agents. No build step. No dependency hell. Just files that work.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="favicon.svg">
   <style>
     :root {
-      --bg: #fafafa;
-      --text: #1a1a1a;
-      --muted: #666;
-      --border: #e5e5e5;
-      --accent: #0066cc;
-      --code-bg: #f4f4f4;
-      --max-width: 720px;
+      --bg: #ffffff;
+      --bg-secondary: #f8fafc;
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-light: #eff6ff;
+      --code-bg: #1e293b;
+      --code-text: #e2e8f0;
+      --success: #10b981;
+      --max-width: 900px;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+      --shadow-lg: 0 4px 6px rgba(0,0,0,0.05), 0 10px 40px rgba(0,0,0,0.08);
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #1a1a1a;
-        --text: #e5e5e5;
-        --muted: #999;
-        --border: #333;
-        --accent: #66b3ff;
-        --code-bg: #2a2a2a;
+        --bg: #0f172a;
+        --bg-secondary: #1e293b;
+        --text: #f1f5f9;
+        --text-secondary: #cbd5e1;
+        --muted: #94a3b8;
+        --border: #334155;
+        --accent: #60a5fa;
+        --accent-hover: #93c5fd;
+        --accent-light: #1e3a5f;
+        --code-bg: #020617;
+        --code-text: #e2e8f0;
+        --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
+        --shadow-lg: 0 4px 6px rgba(0,0,0,0.3), 0 10px 40px rgba(0,0,0,0.3);
       }
     }
 
@@ -35,262 +52,591 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
-      padding: 2rem 1.5rem;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
     }
 
-    main {
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--bg) 0%, var(--bg-secondary) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 5rem 1.5rem 4rem;
+      text-align: center;
+    }
+
+    .hero-inner {
       max-width: var(--max-width);
       margin: 0 auto;
     }
 
-    header {
-      margin-bottom: 3rem;
-      padding-bottom: 2rem;
-      border-bottom: 1px solid var(--border);
+    .logo {
+      font-size: 4rem;
+      margin-bottom: 1rem;
     }
 
     h1 {
-      font-size: 2.5rem;
+      font-size: 3.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--muted) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-weight: 400;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.75rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Main Content */
+    main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    section {
+      margin-bottom: 5rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      font-size: 1.125rem;
       font-weight: 600;
       margin-bottom: 0.5rem;
     }
 
-    .tagline {
-      font-size: 1.25rem;
-      color: var(--muted);
-      margin-bottom: 1.5rem;
-    }
-
-    .links {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .links a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .links a:hover {
-      text-decoration: underline;
-    }
-
-    section {
-      margin-bottom: 2.5rem;
-    }
-
-    h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-
     p {
-      margin-bottom: 1rem;
-      color: var(--text);
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+      font-size: 1.125rem;
     }
 
+    /* Problem/Solution Grid */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .two-col {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    .problem-card, .solution-card {
+      padding: 2rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    .problem-card {
+      background: var(--bg-secondary);
+    }
+
+    .solution-card {
+      background: var(--accent-light);
+      border-color: var(--accent);
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .problem-card h3 {
+      color: var(--muted);
+    }
+
+    .solution-card h3 {
+      color: var(--accent);
+    }
+
+    /* Code Blocks */
     code {
-      font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+      font-family: "SF Mono", "Fira Code", Consolas, monospace;
       font-size: 0.9em;
-      background: var(--code-bg);
-      padding: 0.15em 0.4em;
-      border-radius: 4px;
+    }
+
+    :not(pre) > code {
+      background: var(--bg-secondary);
+      padding: 0.2em 0.5em;
+      border-radius: 6px;
+      border: 1px solid var(--border);
     }
 
     pre {
       background: var(--code-bg);
-      padding: 1rem;
-      border-radius: 6px;
+      color: var(--code-text);
+      padding: 1.5rem;
+      border-radius: var(--radius);
       overflow-x: auto;
-      margin-bottom: 1rem;
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow);
     }
 
     pre code {
       background: none;
+      border: none;
       padding: 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
     }
 
+    .code-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .code-header span {
+      opacity: 0.5;
+    }
+
+    /* File Tree Styling */
     .file-tree {
-      font-family: "SF Mono", Consolas, monospace;
-      font-size: 0.9rem;
-      line-height: 1.8;
+      background: var(--code-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
     }
 
-    ul {
-      margin-left: 1.5rem;
-      margin-bottom: 1rem;
+    .file-tree code {
+      color: var(--code-text);
     }
 
-    li {
+    .file-tree .comment {
+      color: #6b7280;
+    }
+
+    /* Feature Grid */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .features {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature {
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+
+    .feature:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .feature-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .feature h3 {
       margin-bottom: 0.5rem;
     }
 
-    a {
-      color: var(--accent);
+    .feature p {
+      font-size: 0.95rem;
+      margin: 0;
+      color: var(--muted);
     }
 
-    .example-grid {
+    /* Examples Grid */
+    .examples {
       display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .examples {
+        grid-template-columns: 1fr;
+      }
     }
 
     .example {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem;
+      border-radius: var(--radius);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s ease;
     }
 
-    .example h3 {
-      font-size: 1rem;
-      font-weight: 600;
+    .example:hover {
+      border-color: var(--accent);
+      background: var(--bg-secondary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .example-icon {
+      font-size: 1.75rem;
+      flex-shrink: 0;
+    }
+
+    .example-content h3 {
+      color: var(--accent);
       margin-bottom: 0.25rem;
     }
 
-    .example p {
+    .example-content p {
       font-size: 0.9rem;
       color: var(--muted);
       margin: 0;
     }
 
+    /* Quick Start Section */
+    .quickstart {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      border: 1px solid var(--border);
+    }
+
+    .quickstart h2 {
+      margin-bottom: 1rem;
+    }
+
+    .quickstart p {
+      margin-bottom: 1.5rem;
+    }
+
+    /* Related Links */
+    .related-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .related-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s ease;
+    }
+
+    .related-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .related-link span {
+      font-size: 1.5rem;
+    }
+
+    /* Footer */
     footer {
-      margin-top: 4rem;
-      padding-top: 2rem;
       border-top: 1px solid var(--border);
+      padding: 3rem 1.5rem;
+      text-align: center;
       color: var(--muted);
-      font-size: 0.9rem;
     }
 
     footer a {
       color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
     }
 
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 2rem;
-      }
-
-      .tagline {
-        font-size: 1.1rem;
-      }
+    footer a:hover {
+      color: var(--accent);
     }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-copy {
+      font-size: 0.9rem;
+    }
+
+    /* Syntax colors for code */
+    .token-keyword { color: #c678dd; }
+    .token-string { color: #98c379; }
+    .token-comment { color: #5c6370; }
+    .token-function { color: #61afef; }
   </style>
 </head>
 <body>
-  <main>
-    <header>
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="logo">📦</div>
       <h1>Weblet</h1>
       <p class="tagline">Self-contained web apps for AI agents</p>
-      <nav class="links">
-        <a href="https://github.com/jeffrschneider/weblet">GitHub</a>
-        <a href="https://github.com/jeffrschneider/weblet/blob/master/specifications/Weblet-Specification-V1-0-0.md">Specification</a>
-        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples">Examples</a>
-      </nav>
-    </header>
+      <div class="hero-buttons">
+        <a href="https://github.com/jeffrschneider/weblet" class="btn btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          GitHub
+        </a>
+        <a href="https://github.com/jeffrschneider/weblet/blob/master/specifications/Weblet-Specification-V1-0-0.md" class="btn btn-secondary">
+          Read the Spec
+        </a>
+      </div>
+    </div>
+  </div>
 
+  <main>
+    <!-- Problem / Solution -->
     <section>
-      <h2>The Problem</h2>
-      <p>
-        You ask an AI to build a quick web app, and suddenly you're drowning in React setup,
-        npm dependencies, and webpack configs. All you wanted was a simple app.
-      </p>
-      <p>
-        And even if you get it working - how do you share it? How does an AI agent launch it
-        with data? How does it fit into an ecosystem of agent skills?
-      </p>
+      <div class="two-col">
+        <div class="problem-card">
+          <div class="card-icon">😩</div>
+          <h3>The Problem</h3>
+          <p>You ask an AI to build a quick web app, and suddenly you're drowning in React setup, npm dependencies, and webpack configs.</p>
+          <p style="margin-bottom:0">All you wanted was a simple app. Instead, you got a build system.</p>
+        </div>
+        <div class="solution-card">
+          <div class="card-icon">✨</div>
+          <h3>The Solution</h3>
+          <p>A <strong>weblet</strong> is a self-contained web app in a single folder. No build step. No dependency hell.</p>
+          <p style="margin-bottom:0">Just files that work.</p>
+        </div>
+      </div>
     </section>
 
+    <!-- Structure -->
     <section>
-      <h2>The Solution</h2>
-      <p>
-        A <strong>weblet</strong> is a self-contained web app in a single folder.
-        No build step. No dependency hell. Just files that work.
-      </p>
+      <h2>Dead Simple Structure</h2>
+      <p>Every weblet is just a folder with an <code>APP.md</code> manifest and your code.</p>
       <div class="file-tree">
 <pre><code>my-app/
-├── APP.md          # Describes your app
-├── index.html      # Entry point
-└── (your code)     # Whatever you need</code></pre>
+├── APP.md          <span class="comment"># Describes your app</span>
+├── index.html      <span class="comment"># Entry point</span>
+└── (your code)     <span class="comment"># Whatever you need</span></code></pre>
       </div>
-      <p>
-        Open <code>index.html</code> in a browser, and it runs. Want TypeScript? Use Bun -
-        it transpiles on the fly. Want to share it? Zip the folder.
-      </p>
+      <p>Open <code>index.html</code> in a browser, and it runs. Want TypeScript? Use Bun &mdash; it transpiles on the fly. Want to share it? Zip the folder.</p>
     </section>
 
+    <!-- Features -->
+    <section>
+      <h2>Why Weblets?</h2>
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">🚀</div>
+          <h3>Zero Build Step</h3>
+          <p>No webpack, no bundler, no transpilation step. Just run it.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🤖</div>
+          <h3>Agent-Ready</h3>
+          <p>Built-in API for AI agents to pass data in and receive events back.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📦</div>
+          <h3>Portable</h3>
+          <p>Self-contained folder. Zip it, git it, or deploy to any static host.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔧</div>
+          <h3>TypeScript Support</h3>
+          <p>Use Bun runtime for native TypeScript transpilation on the fly.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🎯</div>
+          <h3>AI-Friendly</h3>
+          <p>Simple structure that AI assistants can generate correctly every time.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔌</div>
+          <h3>Works Standalone</h3>
+          <p>Gracefully degrades when no agent is present. Always functional.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Agent Integration -->
     <section>
       <h2>Agent Integration</h2>
-      <p>
-        Weblets can receive data from AI agents via <code>window.__AGENT_CONTEXT__</code>
-        and emit events back. They work standalone too - checking for agent context
-        and gracefully degrading when absent.
-      </p>
-      <p>
-        This makes weblets the <strong>UI layer for Agent Skills</strong> - the skill
-        provides the brain, the weblet provides the face.
-      </p>
+      <p>Weblets can receive data from AI agents via <code>window.__AGENT_CONTEXT__</code> and emit events back. This makes weblets the <strong>UI layer for Agent Skills</strong> &mdash; the skill provides the brain, the weblet provides the face.</p>
+<pre><code><span class="token-comment">// Check if launched by an agent</span>
+<span class="token-keyword">if</span> (window.__AGENT_CONTEXT__) {
+  <span class="token-keyword">const</span> { data, emit } = window.__AGENT_CONTEXT__;
+
+  <span class="token-comment">// Use data passed by the agent</span>
+  renderChart(data.items);
+
+  <span class="token-comment">// Emit events back to the agent</span>
+  emit(<span class="token-string">'item-selected'</span>, { id: selectedId });
+}</code></pre>
     </section>
 
+    <!-- Quick Start -->
     <section>
-      <h2>Quick Start</h2>
-      <p>Open Claude Code (or your AI assistant) and say:</p>
-      <pre><code>Build me a weblet that converts markdown to HTML.
+      <div class="quickstart">
+        <h2>Quick Start</h2>
+        <p>Open Claude Code (or your AI assistant) and say:</p>
+<pre><code>Build me a weblet that converts markdown to HTML.
 Use browser runtime, no external dependencies.
 
 Read the weblet spec:
 https://raw.githubusercontent.com/jeffrschneider/weblet/master/specifications/Weblet-Specification-V1-0-0.md</code></pre>
-    </section>
-
-    <section>
-      <h2>Examples</h2>
-      <div class="example-grid">
-        <div class="example">
-          <h3><a href="https://github.com/jeffrschneider/weblet/tree/master/examples/hello-world">hello-world</a></h3>
-          <p>Simplest possible weblet. Two files.</p>
-        </div>
-        <div class="example">
-          <h3><a href="https://github.com/jeffrschneider/weblet/tree/master/examples/counter">counter</a></h3>
-          <p>TypeScript with Bun runtime.</p>
-        </div>
-        <div class="example">
-          <h3><a href="https://github.com/jeffrschneider/weblet/tree/master/examples/freecell">freecell</a></h3>
-          <p>Full card game with drag-drop, animations, i18n.</p>
-        </div>
-        <div class="example">
-          <h3><a href="https://github.com/jeffrschneider/weblet/tree/master/examples/budget-dashboard">budget-dashboard</a></h3>
-          <p>Agent Context API demo.</p>
-        </div>
-        <div class="example">
-          <h3><a href="https://github.com/jeffrschneider/weblet/tree/master/examples/datawiz-agent">datawiz-agent</a></h3>
-          <p>Full agent with weblet routes + skills.</p>
-        </div>
       </div>
     </section>
 
+    <!-- Examples -->
     <section>
-      <h2>Related</h2>
-      <ul>
-        <li><a href="https://agentskills.io">Agent Skills</a> - Instruction packages for AI agents</li>
-        <li><a href="https://agents.md">AGENTS.md</a> - README format for AI coding agents</li>
-      </ul>
+      <h2>Examples</h2>
+      <p>Learn by example. From minimal to full-featured:</p>
+      <div class="examples">
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/hello-world" class="example">
+          <div class="example-icon">👋</div>
+          <div class="example-content">
+            <h3>hello-world</h3>
+            <p>Simplest possible weblet. Two files.</p>
+          </div>
+        </a>
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/counter" class="example">
+          <div class="example-icon">🔢</div>
+          <div class="example-content">
+            <h3>counter</h3>
+            <p>TypeScript with Bun runtime.</p>
+          </div>
+        </a>
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/freecell" class="example">
+          <div class="example-icon">🃏</div>
+          <div class="example-content">
+            <h3>freecell</h3>
+            <p>Full card game with drag-drop, animations, i18n.</p>
+          </div>
+        </a>
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/budget-dashboard" class="example">
+          <div class="example-icon">📊</div>
+          <div class="example-content">
+            <h3>budget-dashboard</h3>
+            <p>Agent Context API demo.</p>
+          </div>
+        </a>
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/datawiz-agent" class="example">
+          <div class="example-icon">🧙</div>
+          <div class="example-content">
+            <h3>datawiz-agent</h3>
+            <p>Full agent with weblet routes + skills.</p>
+          </div>
+        </a>
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/static-app" class="example">
+          <div class="example-icon">🖼️</div>
+          <div class="example-content">
+            <h3>static-app</h3>
+            <p>Asset organization patterns.</p>
+          </div>
+        </a>
+      </div>
     </section>
 
-    <footer>
-      <p>
-        MIT License
-        &middot;
-        <a href="https://github.com/jeffrschneider/weblet">Source</a>
-        &middot;
-        <a href="https://github.com/jeffrschneider/weblet/issues">Issues</a>
-      </p>
-    </footer>
+    <!-- Related -->
+    <section>
+      <h2>Related Projects</h2>
+      <div class="related-links">
+        <a href="https://agentskills.io" class="related-link">
+          <span>🎯</span>
+          <div>
+            <strong>Agent Skills</strong>
+            <p style="font-size:0.9rem;margin:0;color:var(--muted)">Instruction packages for AI agents</p>
+          </div>
+        </a>
+        <a href="https://agents.md" class="related-link">
+          <span>📄</span>
+          <div>
+            <strong>AGENTS.md</strong>
+            <p style="font-size:0.9rem;margin:0;color:var(--muted)">README format for AI coding agents</p>
+          </div>
+        </a>
+      </div>
+    </section>
   </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://github.com/jeffrschneider/weblet">GitHub</a>
+      <a href="https://github.com/jeffrschneider/weblet/blob/master/specifications/Weblet-Specification-V1-0-0.md">Specification</a>
+      <a href="https://github.com/jeffrschneider/weblet/tree/master/examples">Examples</a>
+      <a href="https://github.com/jeffrschneider/weblet/issues">Issues</a>
+    </div>
+    <p class="footer-copy">MIT License &middot; Built for the AI agent ecosystem</p>
+  </footer>
 </body>
 </html>

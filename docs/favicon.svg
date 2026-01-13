@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="boxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="topGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60a5fa"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+  </defs>
+  <!-- Box body -->
+  <path d="M8 24 L32 12 L56 24 L56 48 L32 60 L8 48 Z" fill="url(#boxGrad)"/>
+  <!-- Box top -->
+  <path d="M8 24 L32 12 L56 24 L32 36 Z" fill="url(#topGrad)"/>
+  <!-- Box left side highlight -->
+  <path d="M8 24 L32 36 L32 60 L8 48 Z" fill="#2563eb" opacity="0.8"/>
+  <!-- Box right side -->
+  <path d="M56 24 L32 36 L32 60 L56 48 Z" fill="#1e40af" opacity="0.9"/>
+  <!-- Open flap left -->
+  <path d="M8 24 L20 8 L32 16 L32 12 Z" fill="#93c5fd"/>
+  <!-- Open flap right -->
+  <path d="M56 24 L44 8 L32 16 L32 12 Z" fill="#60a5fa"/>
+</svg>
