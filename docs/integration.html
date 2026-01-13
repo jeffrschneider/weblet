@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integration Guide - Weblet</title>
+  <meta name="description" content="How to integrate weblet into your app or platform. Programmatic API for validation, serving, and screenshots.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-secondary: #f8fafc;
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --code-bg: #1e293b;
+      --code-text: #e2e8f0;
+      --max-width: 800px;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f172a;
+        --bg-secondary: #1e293b;
+        --text: #f1f5f9;
+        --text-secondary: #cbd5e1;
+        --muted: #94a3b8;
+        --border: #334155;
+        --accent: #60a5fa;
+        --accent-hover: #93c5fd;
+        --code-bg: #020617;
+        --code-text: #e2e8f0;
+        --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem;
+    }
+
+    .header-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 1.25rem;
+    }
+
+    .logo span {
+      font-size: 1.5rem;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    h2:first-of-type {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", Consolas, monospace;
+      font-size: 0.9em;
+    }
+
+    :not(pre) > code {
+      background: var(--bg-secondary);
+      padding: 0.2em 0.5em;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow);
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .token-keyword { color: #c678dd; }
+    .token-string { color: #98c379; }
+    .token-comment { color: #5c6370; font-style: italic; }
+    .token-function { color: #61afef; }
+    .token-type { color: #e5c07b; }
+
+    ul, ol {
+      margin: 1rem 0 1rem 1.5rem;
+      color: var(--text-secondary);
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--text);
+      background: var(--bg-secondary);
+    }
+
+    td {
+      color: var(--text-secondary);
+    }
+
+    .note {
+      background: var(--bg-secondary);
+      border-left: 4px solid var(--accent);
+      padding: 1rem 1.25rem;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin: 1.5rem 0;
+    }
+
+    .note p {
+      margin: 0;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <span>📦</span> Weblet
+      </a>
+      <nav>
+        <a href="https://github.com/jeffrschneider/weblet">GitHub</a>
+        <a href="https://github.com/jeffrschneider/weblet/blob/master/specifications/Weblet-Specification-V1-0-0.md">Spec</a>
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples">Examples</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <h1>Integration Guide</h1>
+    <p class="subtitle">How to integrate weblet into your app or platform.</p>
+
+    <h2>Installation</h2>
+    <p>Install weblet as a dependency:</p>
+<pre><code>bun add weblet
+<span class="token-comment"># or</span>
+npm install weblet</code></pre>
+
+    <h2>Quick Example</h2>
+    <p>Here's a complete example of validating a weblet, serving it, and capturing screenshots:</p>
+<pre><code><span class="token-keyword">import</span> {
+  validateWeblet,
+  getWebletInfo,
+  serveWeblet,
+  captureScreenshots,
+} <span class="token-keyword">from</span> <span class="token-string">'weblet'</span>;
+
+<span class="token-comment">// 1. Validate the weblet</span>
+<span class="token-keyword">const</span> validation = <span class="token-keyword">await</span> <span class="token-function">validateWeblet</span>(<span class="token-string">'./my-app'</span>);
+<span class="token-keyword">if</span> (!validation.valid) {
+  console.error(<span class="token-string">'Invalid weblet:'</span>, validation.errors);
+  process.exit(1);
+}
+
+<span class="token-comment">// 2. Get manifest info</span>
+<span class="token-keyword">const</span> manifest = <span class="token-keyword">await</span> <span class="token-function">getWebletInfo</span>(<span class="token-string">'./my-app'</span>);
+console.log(<span class="token-string">`Loaded: ${manifest.name}`</span>);
+
+<span class="token-comment">// 3. Start the server</span>
+<span class="token-keyword">const</span> server = <span class="token-keyword">await</span> <span class="token-function">serveWeblet</span>(<span class="token-string">'./my-app'</span>, { port: 3000 });
+console.log(<span class="token-string">`Running at ${server.url}`</span>);
+
+<span class="token-comment">// 4. Capture screenshots</span>
+<span class="token-keyword">const</span> screenshots = <span class="token-keyword">await</span> <span class="token-function">captureScreenshots</span>(<span class="token-string">'./my-app'</span>, {
+  output: <span class="token-string">'./previews'</span>,
+  sizes: [<span class="token-string">'desktop'</span>, <span class="token-string">'mobile'</span>],
+});
+console.log(<span class="token-string">'Saved:'</span>, screenshots.files);
+
+<span class="token-comment">// 5. Clean up</span>
+<span class="token-keyword">await</span> server.<span class="token-function">stop</span>();</code></pre>
+
+    <h2>API Reference</h2>
+
+    <h3>validateWeblet(path)</h3>
+    <p>Parse and validate a weblet's APP.md manifest.</p>
+<pre><code><span class="token-keyword">const</span> result = <span class="token-keyword">await</span> <span class="token-function">validateWeblet</span>(<span class="token-string">'./my-app'</span>);
+
+<span class="token-comment">// result.valid: boolean</span>
+<span class="token-comment">// result.errors: string[]</span>
+<span class="token-comment">// result.warnings: string[]</span>
+<span class="token-comment">// result.manifest?: ParsedManifest (if valid)</span></code></pre>
+
+    <h3>getWebletInfo(path)</h3>
+    <p>Get the parsed manifest for a weblet. Throws if invalid.</p>
+<pre><code><span class="token-keyword">const</span> manifest = <span class="token-keyword">await</span> <span class="token-function">getWebletInfo</span>(<span class="token-string">'./my-app'</span>);
+
+<span class="token-comment">// manifest.name: string</span>
+<span class="token-comment">// manifest.description?: string</span>
+<span class="token-comment">// manifest.version?: string</span>
+<span class="token-comment">// manifest.runtime: 'browser' | 'bun' | 'node' | 'deno'</span>
+<span class="token-comment">// manifest.agent?: { ... }</span></code></pre>
+
+    <h3>serveWeblet(path, options?)</h3>
+    <p>Start a weblet server. Returns a handle to control it.</p>
+<pre><code><span class="token-keyword">const</span> server = <span class="token-keyword">await</span> <span class="token-function">serveWeblet</span>(<span class="token-string">'./my-app'</span>, {
+  port: 3000,        <span class="token-comment">// default: 3000</span>
+  hostname: <span class="token-string">'localhost'</span>,
+  open: <span class="token-keyword">false</span>,       <span class="token-comment">// open browser?</span>
+});
+
+<span class="token-comment">// server.url: string (e.g., 'http://localhost:3000')</span>
+<span class="token-comment">// server.stop(): Promise&lt;void&gt;</span>
+<span class="token-comment">// server.isRunning(): boolean</span></code></pre>
+
+    <h3>captureScreenshots(path, options?)</h3>
+    <p>Capture screenshots of a weblet at various viewport sizes.</p>
+<pre><code><span class="token-keyword">const</span> result = <span class="token-keyword">await</span> <span class="token-function">captureScreenshots</span>(<span class="token-string">'./my-app'</span>, {
+  output: <span class="token-string">'./screenshots'</span>,  <span class="token-comment">// default: ~/.weblet/screenshots/&lt;name&gt;/</span>
+  sizes: [<span class="token-string">'desktop'</span>, <span class="token-string">'mobile'</span>],  <span class="token-comment">// viewport presets or WxH</span>
+  animated: <span class="token-keyword">false</span>,           <span class="token-comment">// capture GIF?</span>
+  duration: 5,               <span class="token-comment">// GIF duration in seconds</span>
+  fps: 10,                   <span class="token-comment">// GIF frame rate</span>
+  wait: 1000,                <span class="token-comment">// ms to wait after page load</span>
+  route: <span class="token-string">'/'</span>,               <span class="token-comment">// route to capture</span>
+});
+
+<span class="token-comment">// result.files: string[] (paths to screenshots)</span>
+<span class="token-comment">// result.outputDir: string</span>
+<span class="token-comment">// result.appName: string</span></code></pre>
+
+    <h2>Screenshot Options</h2>
+
+    <h3>Viewport Presets</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Preset</th>
+          <th>Dimensions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><code>desktop</code></td><td>1280 x 800</td></tr>
+        <tr><td><code>mobile</code></td><td>375 x 667</td></tr>
+        <tr><td><code>tablet</code></td><td>768 x 1024</td></tr>
+        <tr><td><code>wide</code></td><td>1920 x 1080</td></tr>
+      </tbody>
+    </table>
+    <p>You can also use custom dimensions: <code>'800x600'</code></p>
+
+    <h3>Animated GIFs</h3>
+    <p>To capture animated previews:</p>
+<pre><code><span class="token-keyword">const</span> result = <span class="token-keyword">await</span> <span class="token-function">captureScreenshots</span>(<span class="token-string">'./my-app'</span>, {
+  animated: <span class="token-keyword">true</span>,
+  duration: 5,     <span class="token-comment">// 5 second GIF</span>
+  fps: 10,         <span class="token-comment">// 10 frames per second</span>
+});</code></pre>
+
+    <div class="note">
+      <p><strong>Note:</strong> Animated GIF generation requires ffmpeg to be installed on your system. Without ffmpeg, the feature will log a warning and skip GIF creation.</p>
+    </div>
+
+    <h2>Use Cases</h2>
+
+    <h3>App Builder Platform</h3>
+    <p>A platform that lets users describe apps, generates weblets, and shows previews:</p>
+<pre><code><span class="token-comment">// User describes what they want...</span>
+<span class="token-comment">// AI generates the weblet...</span>
+
+<span class="token-comment">// Validate it worked</span>
+<span class="token-keyword">const</span> { valid, errors } = <span class="token-keyword">await</span> <span class="token-function">validateWeblet</span>(outputPath);
+<span class="token-keyword">if</span> (!valid) {
+  <span class="token-keyword">return</span> { success: <span class="token-keyword">false</span>, errors };
+}
+
+<span class="token-comment">// Get preview images</span>
+<span class="token-keyword">const</span> { files } = <span class="token-keyword">await</span> <span class="token-function">captureScreenshots</span>(outputPath, {
+  output: <span class="token-string">`./previews/${userId}`</span>,
+  sizes: [<span class="token-string">'desktop'</span>, <span class="token-string">'mobile'</span>],
+});
+
+<span class="token-keyword">return</span> {
+  success: <span class="token-keyword">true</span>,
+  previews: files,
+};</code></pre>
+
+    <h3>Weblet Marketplace</h3>
+    <p>A registry that indexes and showcases weblets:</p>
+<pre><code><span class="token-comment">// On weblet submission...</span>
+<span class="token-keyword">const</span> manifest = <span class="token-keyword">await</span> <span class="token-function">getWebletInfo</span>(submittedPath);
+
+<span class="token-comment">// Index it</span>
+<span class="token-keyword">await</span> db.weblets.<span class="token-function">create</span>({
+  name: manifest.name,
+  description: manifest.description,
+  version: manifest.version,
+  runtime: manifest.runtime,
+  triggers: manifest.agent?.triggers,
+});
+
+<span class="token-comment">// Generate listing images</span>
+<span class="token-keyword">await</span> <span class="token-function">captureScreenshots</span>(submittedPath, {
+  output: <span class="token-string">`./cdn/weblets/${manifest.name}`</span>,
+  sizes: [<span class="token-string">'desktop'</span>],
+  animated: <span class="token-keyword">true</span>,
+  duration: 3,
+});</code></pre>
+
+    <h3>CI/CD Pipeline</h3>
+    <p>Validate weblets in your build process:</p>
+<pre><code><span class="token-comment">// In your test/build script</span>
+<span class="token-keyword">import</span> { validateWeblet } <span class="token-keyword">from</span> <span class="token-string">'weblet'</span>;
+
+<span class="token-keyword">const</span> result = <span class="token-keyword">await</span> <span class="token-function">validateWeblet</span>(<span class="token-string">'./dist'</span>);
+
+<span class="token-keyword">if</span> (!result.valid) {
+  console.error(<span class="token-string">'Weblet validation failed:'</span>);
+  result.errors.<span class="token-function">forEach</span>(e => console.error(<span class="token-string">`  - ${e}`</span>));
+  process.exit(1);
+}
+
+<span class="token-keyword">if</span> (result.warnings.length > 0) {
+  console.warn(<span class="token-string">'Warnings:'</span>);
+  result.warnings.<span class="token-function">forEach</span>(w => console.warn(<span class="token-string">`  - ${w}`</span>));
+}
+
+console.log(<span class="token-string">'Weblet is valid!'</span>);</code></pre>
+
+    <h2>TypeScript Types</h2>
+    <p>All types are exported for TypeScript users:</p>
+<pre><code><span class="token-keyword">import</span> <span class="token-keyword">type</span> {
+  <span class="token-type">ServeOptions</span>,
+  <span class="token-type">ScreenshotOptions</span>,
+  <span class="token-type">ScreenshotResult</span>,
+  <span class="token-type">ValidationResult</span>,
+  <span class="token-type">WebletServerHandle</span>,
+  <span class="token-type">ParsedManifest</span>,
+} <span class="token-keyword">from</span> <span class="token-string">'weblet'</span>;</code></pre>
+
+  </main>
+
+  <footer>
+    <a href="/">Home</a> ·
+    <a href="https://github.com/jeffrschneider/weblet">GitHub</a> ·
+    <a href="https://github.com/jeffrschneider/weblet/issues">Issues</a>
+  </footer>
+</body>
+</html>

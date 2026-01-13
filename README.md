@@ -336,6 +336,43 @@ weblet screenshot ./my-app --animated --interactions demo.json
 
 ---
 
+## Programmatic API
+
+Building a platform that generates weblets? You can use weblet as a library:
+
+```typescript
+import {
+  validateWeblet,
+  getWebletInfo,
+  serveWeblet,
+  captureScreenshots,
+} from 'weblet';
+
+// Validate a weblet
+const result = await validateWeblet('./my-app');
+
+// Get manifest info
+const manifest = await getWebletInfo('./my-app');
+
+// Start a server
+const server = await serveWeblet('./my-app', { port: 3000 });
+console.log(`Running at ${server.url}`);
+
+// Capture screenshots
+const screenshots = await captureScreenshots('./my-app', {
+  output: './previews',
+  sizes: ['desktop', 'mobile'],
+  animated: true,
+});
+
+// Clean up
+await server.stop();
+```
+
+**[Full Integration Guide](https://weblet.dev/integration.html)** — detailed API reference, options, and use cases.
+
+---
+
 ## Examples in This Repo
 
 Learn by example. This repo includes six examples, from minimal weblets to a full agent:

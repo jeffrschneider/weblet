@@ -455,6 +455,9 @@
         <a href="https://github.com/jeffrschneider/weblet/blob/master/specifications/Weblet-Specification-V1-0-0.md" class="btn btn-secondary">
           Read the Spec
         </a>
+        <a href="integration.html" class="btn btn-secondary">
+          Integration Guide
+        </a>
       </div>
     </div>
   </div>
@@ -555,6 +558,19 @@ Use browser runtime, no external dependencies.
 Read the weblet spec:
 https://raw.githubusercontent.com/jeffrschneider/weblet/master/specifications/Weblet-Specification-V1-0-0.md</code></pre>
       </div>
+    </section>
+
+    <!-- For Platform Builders -->
+    <section>
+      <h2>For Platform Builders</h2>
+      <p>Building an app that generates weblets? Use the programmatic API:</p>
+<pre><code><span class="token-keyword">import</span> { validateWeblet, serveWeblet, captureScreenshots } <span class="token-keyword">from</span> <span class="token-string">'weblet'</span>;
+
+<span class="token-comment">// Validate, serve, and screenshot in a few lines</span>
+<span class="token-keyword">const</span> server = <span class="token-keyword">await</span> <span class="token-function">serveWeblet</span>(<span class="token-string">'./my-app'</span>);
+<span class="token-keyword">const</span> shots = <span class="token-keyword">await</span> <span class="token-function">captureScreenshots</span>(<span class="token-string">'./my-app'</span>, { output: <span class="token-string">'./previews'</span> });
+<span class="token-keyword">await</span> server.<span class="token-function">stop</span>();</code></pre>
+      <p><a href="integration.html"><strong>Integration Guide</strong></a> &mdash; full API reference, options, and use cases.</p>
     </section>
 
     <!-- Examples -->
