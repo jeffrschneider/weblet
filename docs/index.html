@@ -446,7 +446,7 @@
     <div class="hero-inner">
       <div class="logo">📦</div>
       <h1>Weblet</h1>
-      <p class="tagline">Self-contained web apps for AI agents</p>
+      <p class="tagline">The UI layer for AI agents</p>
       <div class="hero-buttons">
         <a href="https://github.com/jeffrschneider/weblet" class="btn btn-primary">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
@@ -464,16 +464,16 @@
     <section>
       <div class="two-col">
         <div class="problem-card">
-          <div class="card-icon">😩</div>
+          <div class="card-icon">🤔</div>
           <h3>The Problem</h3>
-          <p>You ask an AI to build a quick web app, and suddenly you're drowning in React setup, npm dependencies, and webpack configs.</p>
-          <p style="margin-bottom:0">All you wanted was a simple app. Instead, you got a build system.</p>
+          <p>AI agents are getting powerful, but they're trapped in text. When they need to show you data, visualizations, or interactive tools &mdash; they're stuck.</p>
+          <p style="margin-bottom:0">Agents need a way to create UI.</p>
         </div>
         <div class="solution-card">
           <div class="card-icon">✨</div>
           <h3>The Solution</h3>
-          <p>A <strong>weblet</strong> is a self-contained web app in a single folder. No build step. No dependency hell.</p>
-          <p style="margin-bottom:0">Just files that work.</p>
+          <p>A <strong>weblet</strong> is a portable web app that agents can generate, launch with data, and communicate with.</p>
+          <p style="margin-bottom:0">The skill provides the brain. The weblet provides the face.</p>
         </div>
       </div>
     </section>
@@ -496,42 +496,42 @@
       <h2>Why Weblets?</h2>
       <div class="features">
         <div class="feature">
-          <div class="feature-icon">🚀</div>
-          <h3>Zero Build Step</h3>
-          <p>No webpack, no bundler, no transpilation step. Just run it.</p>
+          <div class="feature-icon">🤖</div>
+          <h3>Agent-Native</h3>
+          <p>Agents can pass data in and receive events back via a simple convention.</p>
         </div>
         <div class="feature">
-          <div class="feature-icon">🤖</div>
-          <h3>Agent-Ready</h3>
-          <p>Built-in API for AI agents to pass data in and receive events back.</p>
+          <div class="feature-icon">🎯</div>
+          <h3>AI-Generatable</h3>
+          <p>Simple structure that AI assistants can create correctly every time.</p>
         </div>
         <div class="feature">
           <div class="feature-icon">📦</div>
           <h3>Portable</h3>
-          <p>Self-contained folder. Zip it, git it, or deploy to any static host.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">🔧</div>
-          <h3>TypeScript Support</h3>
-          <p>Use Bun runtime for native TypeScript transpilation on the fly.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">🎯</div>
-          <h3>AI-Friendly</h3>
-          <p>Simple structure that AI assistants can generate correctly every time.</p>
+          <p>Self-contained folder. Zip it, git it, or deploy anywhere.</p>
         </div>
         <div class="feature">
           <div class="feature-icon">🔌</div>
           <h3>Works Standalone</h3>
           <p>Gracefully degrades when no agent is present. Always functional.</p>
         </div>
+        <div class="feature">
+          <div class="feature-icon">🚀</div>
+          <h3>Zero Build Step</h3>
+          <p>No webpack, no bundler. Just files that run.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔧</div>
+          <h3>TypeScript Ready</h3>
+          <p>Use Bun runtime for native TypeScript on the fly.</p>
+        </div>
       </div>
     </section>
 
     <!-- Agent Integration -->
     <section>
-      <h2>Agent Integration</h2>
-      <p>Weblets can receive data from AI agents via <code>window.__AGENT_CONTEXT__</code> and emit events back. This makes weblets the <strong>UI layer for Agent Skills</strong> &mdash; the skill provides the brain, the weblet provides the face.</p>
+      <h2>How It Works</h2>
+      <p>When an agent launches a weblet, it injects context via <code>window.__AGENT_CONTEXT__</code>. The weblet reads this data and can emit events back. Simple JavaScript &mdash; no framework required.</p>
 <pre><code><span class="token-comment">// Check if launched by an agent</span>
 <span class="token-keyword">if</span> (window.__AGENT_CONTEXT__) {
   <span class="token-keyword">const</span> { data, emit } = window.__AGENT_CONTEXT__;
