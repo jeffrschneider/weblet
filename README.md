@@ -137,6 +137,70 @@ This is how weblets become the **UI layer for Agent Skills** - the skill provide
 
 ---
 
+## Building a Full Agent
+
+When you have multiple skills that work together, you can create a full agent with:
+- An `AGENTS.md` file (instructions for AI coding agents)
+- A `/skills` directory (one folder per skill with SKILL.md)
+- A `/weblet` directory (one weblet with routes per skill)
+
+```
+my-agent/
+├── AGENTS.md                    # Agent instructions
+├── weblet/
+│   ├── APP.md                   # Weblet manifest
+│   ├── index.html
+│   ├── serve.ts
+│   └── src/
+│       └── routes/              # One route per skill
+│           ├── analyze.ts
+│           ├── visualize.ts
+│           └── transform.ts
+└── skills/
+    ├── data-analysis/
+    │   ├── SKILL.md
+    │   ├── assets/
+    │   └── references/
+    ├── data-visualization/
+    │   ├── SKILL.md
+    │   ├── assets/
+    │   └── references/
+    └── data-transform/
+        ├── SKILL.md
+        ├── scripts/
+        └── references/
+```
+
+**Key patterns:**
+- **One weblet, multiple routes** - The weblet is agent-level, not skill-level
+- **Routes map to skills** - `/analyze` uses `data-analysis`, `/visualize` uses `data-visualization`
+- **AGENTS.md references both** - Documents when to offer the weblet and what skills are available
+- **Weblet works standalone** - Checks `window.__AGENT_CONTEXT__` for enhancement
+
+Your `AGENTS.md` documents how it all fits together:
+
+```markdown
+## Weblet
+
+This agent provides an interactive dashboard at `/weblet`.
+
+**Dashboard routes:**
+| Route | Purpose | Skill |
+|-------|---------|-------|
+| `/` | Overview | - |
+| `/analyze` | Data exploration | data-analysis |
+| `/visualize` | Chart builder | data-visualization |
+
+## Skills
+
+- `/skills/data-analysis` - Statistical analysis
+- `/skills/data-visualization` - Chart generation
+```
+
+See the complete example: **[datawiz-agent](examples/datawiz-agent)** - a full agent with AGENTS.md, weblet routes, and skills with varied subdirectories.
+
+---
+
 ## The APP.md Manifest
 
 Every weblet has an `APP.md` file. It's simple - YAML frontmatter plus markdown docs:
@@ -254,7 +318,7 @@ No install step. No build step. It just runs.
 
 ## Examples in This Repo
 
-Learn by example. This repo includes five weblets, from minimal to complex:
+Learn by example. This repo includes six examples, from minimal weblets to a full agent:
 
 ### [hello-world](examples/hello-world)
 The simplest possible weblet. Two files. Open in browser.
@@ -271,6 +335,9 @@ Full card game with drag-drop, animations, i18n, persistence, accessibility.
 
 ### [budget-dashboard](examples/budget-dashboard)
 Agent Context API demo. Receives data from agents, emits events, works standalone.
+
+### [datawiz-agent](examples/datawiz-agent)
+Full agent example with AGENTS.md, weblet routes mapping to skills, and skills with varied subdirectories (assets/, references/, scripts/).
 
 ---
 
@@ -327,7 +394,7 @@ This repo contains:
 | Directory | What's in it |
 |-----------|--------------|
 | `specifications/` | The formal Weblet Specification |
-| `examples/` | Five reference weblets to learn from |
+| `examples/` | Six reference examples (weblets + full agent) |
 | `src/` | Toolkit: parser, validator, runtime utilities |
 | `tests/` | Test suite (153 tests) |
 
