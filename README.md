@@ -1,28 +1,19 @@
 # Weblet
 
-So you want to build a portable web app that works with AI agents and skills. And you use an AI coding assistant like Claude Code, Cursor, or Copilot.
+**The UI layer for AI agents.**
 
-**We have the solution for you.**
-
----
-
-## The Problem
-
-You're in Claude Code. You want to build a quick web app - maybe a dashboard, a game, a tool. You ask Claude to build it, and suddenly you're drowning in:
-
-- "Let me set up a React project with Vite..."
-- "First, run `npm install` with these 47 dependencies..."
-- "Here's your webpack.config.js..."
-
-All you wanted was a simple app. Instead, you got a build system.
-
-And even if you get it working - how do you share it? How does an AI agent launch it with data? How does it fit into the ecosystem of [Agent Skills](https://agentskills.io)?
+AI agents are powerful, but they're trapped in text. When they need to show you data, visualizations, or interactive tools — they're stuck. Agents need a way to create UI.
 
 ---
 
-## The Solution: Weblets
+## What's a Weblet?
 
-A **weblet** is a self-contained web app in a single folder. No build step. No dependency hell. Just files that work.
+A **weblet** is a portable web app that AI agents can:
+- **Generate** — simple structure that AI assistants create correctly every time
+- **Launch with data** — pass context via `window.__AGENT_CONTEXT__`
+- **Communicate with** — receive events back from user interactions
+
+The skill provides the brain. The weblet provides the face.
 
 ```
 my-app/
@@ -109,22 +100,22 @@ bun serve.ts
 
 ---
 
-## Building Agent-Integrated Apps
+## Agent Integration
 
-This is where weblets shine. Want your app to receive data from an AI agent? Emit events back? Say:
+This is the core use case. Want your app to receive data from an AI agent? Emit events back? Say:
 
 ```
 Build me a weblet that visualizes JSON data as an interactive tree.
-Include Agent Context API integration so an agent can:
+Include Agent Context integration so an agent can:
 - Pass in JSON data to visualize
 - Receive events when user selects a node
 
 When opened standalone (no agent), show a textarea for pasting JSON.
 
-Read the weblet spec (especially the Agent Context API section):
+Read the weblet spec (especially the Agent Context section):
 https://raw.githubusercontent.com/jeffrschneider/weblet/master/specifications/Weblet-Specification-V1-0-0.md
 
-Use this example for Agent Context API patterns:
+Use this example for Agent Context patterns:
 https://github.com/jeffrschneider/weblet/tree/master/examples/budget-dashboard
 ```
 
@@ -275,7 +266,7 @@ Example structure: https://github.com/jeffrschneider/weblet/tree/master/examples
 ```
 Create a weblet that visualizes CSV data as sortable tables and charts.
 Use Chart.js from esm.sh CDN.
-Include Agent Context API - agent can pass CSV data directly.
+Include Agent Context - agent can pass CSV data directly.
 Standalone mode shows file upload.
 
 Weblet spec: https://raw.githubusercontent.com/jeffrschneider/weblet/master/specifications/Weblet-Specification-V1-0-0.md
@@ -363,7 +354,7 @@ Full card game with drag-drop, animations, i18n, persistence, accessibility.
 **This entire game was built through AI conversation.**
 
 ### [budget-dashboard](examples/budget-dashboard)
-Agent Context API demo. Receives data from agents, emits events, works standalone.
+Agent Context demo. Receives data from agents, emits events, works standalone.
 
 ### [datawiz-agent](examples/datawiz-agent)
 Full agent example with AGENTS.md, weblet routes mapping to skills, and skills with varied subdirectories (assets/, references/, scripts/).
@@ -402,7 +393,7 @@ Full agent example with AGENTS.md, weblet routes mapping to skills, and skills w
 Weblets are the **UI layer** that connects to:
 - **[Agent Skills](https://agentskills.io)** - procedural knowledge agents can follow
 - **[AGENTS.md](https://agents.md)** - instructions for AI coding agents
-- **Any AI agent** that implements the Agent Context API
+- **Any AI agent** that supports the Agent Context pattern
 
 ---
 
@@ -412,7 +403,7 @@ Want the formal details? See the full specification:
 
 **[Weblet Specification v1.0.0](specifications/Weblet-Specification-V1-0-0.md)**
 
-Covers: manifest format, runtimes, dependencies, storage, Agent Context API, security.
+Covers: manifest format, runtimes, dependencies, storage, Agent Context, security.
 
 ---
 
