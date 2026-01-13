@@ -68,7 +68,7 @@ List Options:
 
 Screenshot Options:
   --sizes <list>      Viewport sizes (default: desktop,mobile)
-  --output <dir>      Output directory (default: assets/screenshots)
+  --output <dir>      Output directory (default: ~/.weblet/screenshots/<name>)
   --animated          Capture animated GIF preview
   --duration <sec>    Animation duration (default: 5)
   --fps <number>      GIF frame rate (default: 10)

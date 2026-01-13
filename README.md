@@ -316,6 +316,35 @@ No install step. No build step. It just runs.
 
 ---
 
+## Capturing Screenshots
+
+Generate preview images for your weblet:
+
+```bash
+weblet screenshot ./my-app
+```
+
+This captures desktop and mobile screenshots to `~/.weblet/screenshots/<app-name>/`.
+
+**Options:**
+```bash
+# Multiple viewport sizes
+weblet screenshot ./my-app --sizes desktop,mobile,tablet
+
+# Animated GIF preview
+weblet screenshot ./my-app --animated --duration 5
+
+# Custom output location
+weblet screenshot ./my-app --output ./previews
+
+# With interaction script for animated captures
+weblet screenshot ./my-app --animated --interactions demo.json
+```
+
+**Viewport presets:** `desktop` (1280x800), `mobile` (375x667), `tablet` (768x1024), `wide` (1920x1080), or custom `WIDTHxHEIGHT`.
+
+---
+
 ## Examples in This Repo
 
 Learn by example. This repo includes six examples, from minimal weblets to a full agent:

@@ -69,7 +69,7 @@ const VIEWPORT_PRESETS: Record<string, ViewportSize> = {
 
 const DEFAULT_OPTIONS: ScreenshotOptions = {
   sizes: ["desktop", "mobile"],
-  output: "assets/screenshots",
+  output: "", // Will be computed based on app name
   animated: false,
   duration: 5,
   fps: 10,
@@ -80,6 +80,14 @@ const DEFAULT_OPTIONS: ScreenshotOptions = {
   overwrite: false,
   json: false,
 };
+
+/**
+ * Get the default screenshots directory (~/.weblet/screenshots/<app-name>/)
+ */
+function getDefaultScreenshotsDir(appName: string): string {
+  const homeDir = process.env.HOME || process.env.USERPROFILE || ".";
+  return join(homeDir, ".weblet", "screenshots", appName);
+}
 
 // =============================================================================
 // Puppeteer Lazy Loading
@@ -486,14 +494,19 @@ export async function screenshotCommand(
     }
   }
 
-  // Create output directory
-  const outputDir = join(targetPath, options.output);
+  // Parse manifest first (needed for default output directory)
+  const { manifest } = await parseFile(targetPath);
+
+  // Determine output directory
+  // Default: ~/.weblet/screenshots/<app-name>/
+  // Override with --output flag
+  const outputDir = options.output
+    ? resolve(options.output)
+    : getDefaultScreenshotsDir(manifest.name);
+
   if (!existsSync(outputDir)) {
     mkdirSync(outputDir, { recursive: true });
   }
-
-  // Parse manifest
-  const { manifest } = await parseFile(targetPath);
 
   if (!options.json) {
     printInfo(`Capturing screenshots for ${manifest.name}...`);
@@ -618,6 +631,6 @@ export async function screenshotCommand(
   if (options.json) {
     console.log(JSON.stringify({ screenshots: results }, null, 2));
   } else {
-    printSuccess(`\nCaptured ${results.length} screenshot(s) to ${options.output}/`);
+    printSuccess(`\nCaptured ${results.length} screenshot(s) to ${outputDir}`);
   }
 }
