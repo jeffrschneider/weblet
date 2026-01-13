@@ -48,7 +48,9 @@ Open Claude Code (or your preferred AI assistant) in an empty folder and say:
 ```
 Build me a weblet that converts markdown to HTML in real-time.
 Use browser runtime, no external dependencies.
-Follow the weblet spec - it needs an APP.md manifest.
+
+Read the weblet spec for the APP.md format:
+https://raw.githubusercontent.com/jeffrschneider/weblet/master/specifications/Weblet-Specification-V1-0-0.md
 ```
 
 Claude will create:
@@ -76,7 +78,11 @@ Build me a weblet for a pomodoro timer with:
 - Session history with local storage
 - Clean, minimal UI
 
-Look at the counter example in the weblet repo for the structure.
+Read the weblet spec:
+https://raw.githubusercontent.com/jeffrschneider/weblet/master/specifications/Weblet-Specification-V1-0-0.md
+
+Use this example as a reference for Bun/TypeScript structure:
+https://github.com/jeffrschneider/weblet/tree/master/examples/counter
 ```
 
 Claude will create:
@@ -114,6 +120,12 @@ Include Agent Context API integration so an agent can:
 - Receive events when user selects a node
 
 When opened standalone (no agent), show a textarea for pasting JSON.
+
+Read the weblet spec (especially the Agent Context API section):
+https://raw.githubusercontent.com/jeffrschneider/weblet/master/specifications/Weblet-Specification-V1-0-0.md
+
+Use this example for Agent Context API patterns:
+https://github.com/jeffrschneider/weblet/tree/master/examples/budget-dashboard
 ```
 
 Claude will create an app that:
@@ -174,12 +186,14 @@ agent:
 
 ## Example Prompts
 
-Here are prompts that work well with Claude Code:
+Here are prompts that work well with Claude Code. Each includes explicit URLs so Claude reads the right files.
 
 **Simple utility:**
 ```
 Create a weblet that generates QR codes from text input.
 Browser runtime, no dependencies (use a simple QR algorithm or canvas).
+
+Weblet spec: https://raw.githubusercontent.com/jeffrschneider/weblet/master/specifications/Weblet-Specification-V1-0-0.md
 ```
 
 **Interactive tool:**
@@ -188,6 +202,9 @@ Build a weblet color palette generator.
 User picks a base color, app generates complementary/analogous colors.
 Include copy-to-clipboard for hex values.
 Use Bun runtime for TypeScript.
+
+Weblet spec: https://raw.githubusercontent.com/jeffrschneider/weblet/master/specifications/Weblet-Specification-V1-0-0.md
+Example structure: https://github.com/jeffrschneider/weblet/tree/master/examples/counter
 ```
 
 **Data visualization:**
@@ -196,19 +213,27 @@ Create a weblet that visualizes CSV data as sortable tables and charts.
 Use Chart.js from esm.sh CDN.
 Include Agent Context API - agent can pass CSV data directly.
 Standalone mode shows file upload.
+
+Weblet spec: https://raw.githubusercontent.com/jeffrschneider/weblet/master/specifications/Weblet-Specification-V1-0-0.md
+Agent integration example: https://github.com/jeffrschneider/weblet/tree/master/examples/budget-dashboard
 ```
 
 **Game:**
 ```
 Build a weblet implementation of 2048.
 Keyboard controls, touch swipe support, high score persistence.
-Use Bun runtime. Look at the freecell example for structure.
+Use Bun runtime for TypeScript.
+
+Weblet spec: https://raw.githubusercontent.com/jeffrschneider/weblet/master/specifications/Weblet-Specification-V1-0-0.md
+Game example: https://github.com/jeffrschneider/weblet/tree/master/examples/freecell
 ```
 
-**Pro tip:** Point Claude at the examples in this repo:
+**Pro tip:** Point Claude at specific examples:
 ```
-Look at examples/budget-dashboard in the weblet repo.
-Build something similar but for tracking habits instead of expenses.
+Read this weblet example:
+https://github.com/jeffrschneider/weblet/tree/master/examples/budget-dashboard
+
+Build something similar but for tracking daily habits instead of expenses.
 ```
 
 ---
