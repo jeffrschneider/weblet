@@ -35,7 +35,7 @@ That's it. Open `index.html` in a browser, and it runs.
 
 Want TypeScript without a build step? Use Bun runtime - it transpiles on the fly.
 
-Want to integrate with AI agents? There's an API for that.
+Want to integrate with AI agents? Weblets can receive data from agents and emit events back to them.
 
 Want to share it? Zip the folder. Or push to GitHub. Or deploy to any static host.
 
