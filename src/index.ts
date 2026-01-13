@@ -4,6 +4,19 @@
  * Main entry point exporting all public modules.
  */
 
+// High-level API (recommended for integrations)
+export {
+  validateWeblet,
+  getWebletInfo,
+  serveWeblet,
+  captureScreenshots,
+  type ServeOptions,
+  type ScreenshotOptions,
+  type ScreenshotResult,
+  type ValidationResult,
+  type WebletServerHandle,
+} from "./api.ts";
+
 // Parser module
 export * from "./parser/index.ts";
 
