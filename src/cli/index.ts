@@ -12,6 +12,7 @@ import { initCommand } from "./commands/init.ts";
 import { runCommand } from "./commands/run.ts";
 import { vendorCommand } from "./commands/vendor.ts";
 import { listCommand } from "./commands/list.ts";
+import { screenshotCommand } from "./commands/screenshot.ts";
 
 // =============================================================================
 // Types
@@ -41,6 +42,7 @@ Commands:
   init [path]         Create a new weblet
   vendor <package>    Vendor a dependency from CDN
   list [path]         List discovered weblets
+  screenshot <path>   Capture screenshots of a weblet
 
 Options:
   --help, -h          Show help
@@ -64,6 +66,18 @@ List Options:
   --depth <n>         Max depth for recursive search
   --all, -a           Include invalid weblets
 
+Screenshot Options:
+  --sizes <list>      Viewport sizes (default: desktop,mobile)
+  --output <dir>      Output directory (default: assets/screenshots)
+  --animated          Capture animated GIF preview
+  --duration <sec>    Animation duration (default: 5)
+  --fps <number>      GIF frame rate (default: 10)
+  --wait <ms>         Wait after page load (default: 1000)
+  --route <path>      Route to capture (default: /)
+  --interactions <f>  JSON file with interaction script
+  --update-manifest   Add paths to APP.md screenshots field
+  --overwrite         Overwrite existing screenshots
+
 Examples:
   weblet run ./my-app
   weblet run ./my-app --port 8080 --open
@@ -72,6 +86,8 @@ Examples:
   weblet init my-new-app --runtime bun
   weblet vendor lodash@4.17.21
   weblet list --recursive
+  weblet screenshot ./my-app
+  weblet screenshot ./my-app --animated --duration 5
 `.trim();
 
 // =============================================================================
@@ -180,6 +196,12 @@ async function main(): Promise<void> {
       case "ls":
       case "discover":
         await listCommand(args, flags);
+        break;
+
+      case "screenshot":
+      case "capture":
+      case "preview":
+        await screenshotCommand(args, flags);
         break;
 
       default:

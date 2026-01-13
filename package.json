@@ -24,6 +24,8 @@
     "cli": "npx tsx src/cli/index.ts"
   },
   "dependencies": {
+    "playwright": "^1.57.0",
+    "puppeteer": "^24.35.0",
     "yaml": "^2.3.4"
   },
   "devDependencies": {
