@@ -3,196 +3,162 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Integration Guide - Weblet</title>
-  <meta name="description" content="How to integrate weblet into your app or platform. Programmatic API for validation, serving, and screenshots.">
+  <title>API Reference - Weblet</title>
+  <meta name="description" content="Programmatic API for validating, serving, and capturing screenshots of weblets.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root {
-      /* Bold color palette */
-      --purple-400: #A855F7;
-      --purple-500: #8B5CF6;
-      --purple-600: #7C3AED;
-      --coral-400: #FB923C;
-      --coral-500: #F97316;
-      --cyan-400: #22D3EE;
-      --cyan-500: #06B6D4;
-      --emerald-500: #10B981;
-
-      /* Light theme */
-      --bg: #FAFAFA;
-      --bg-secondary: #FFFFFF;
-      --bg-card: rgba(255, 255, 255, 0.7);
-      --text: #1A1A2E;
-      --text-secondary: #4A4A68;
-      --text-muted: #6B7280;
-      --border: rgba(139, 92, 246, 0.15);
-      --border-strong: rgba(139, 92, 246, 0.3);
-
-      /* Gradients */
-      --gradient-primary: linear-gradient(135deg, var(--purple-500) 0%, var(--coral-500) 100%);
-      --gradient-secondary: linear-gradient(135deg, var(--cyan-500) 0%, var(--purple-500) 100%);
-      --gradient-text: linear-gradient(135deg, var(--purple-400) 0%, var(--coral-400) 50%, var(--cyan-400) 100%);
-
-      /* Effects */
-      --shadow-sm: 0 2px 8px rgba(139, 92, 246, 0.08);
-      --shadow-md: 0 4px 20px rgba(139, 92, 246, 0.12);
-      --shadow-lg: 0 8px 40px rgba(139, 92, 246, 0.16);
-      --glass: rgba(255, 255, 255, 0.8);
-
-      /* Layout */
-      --max-width: 900px;
-      --radius: 16px;
-      --radius-lg: 24px;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0A0A0F;
-        --bg-secondary: #12121A;
-        --bg-card: rgba(26, 26, 46, 0.6);
-        --text: #F8FAFC;
-        --text-secondary: #CBD5E1;
-        --text-muted: #94A3B8;
-        --border: rgba(139, 92, 246, 0.2);
-        --border-strong: rgba(139, 92, 246, 0.4);
-        --glass: rgba(26, 26, 46, 0.7);
-        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
-        --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
-      }
-    }
-
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
+    :root {
+      --white: #ffffff;
+      --gray-50: #fafafa;
+      --gray-100: #f4f4f5;
+      --gray-200: #e4e4e7;
+      --gray-300: #d4d4d8;
+      --gray-400: #a1a1aa;
+      --gray-500: #71717a;
+      --gray-600: #52525b;
+      --gray-700: #3f3f46;
+      --gray-800: #27272a;
+      --gray-900: #18181b;
+      --gray-950: #09090b;
+      --violet-500: #8b5cf6;
+      --violet-600: #7c3aed;
+      --orange-500: #f97316;
+      --cyan-400: #22d3ee;
     }
 
-    /* Animated background */
-    .bg-grid {
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--gray-950);
+      color: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== NAVIGATION ==================== */
+    nav {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      bottom: 0;
-      background-image:
-        linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    header {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border);
+      z-index: 1000;
       padding: 1.25rem 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      background: rgba(9, 9, 11, 0.8);
       backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
-    .header-inner {
-      max-width: var(--max-width);
+    .nav-inner {
+      max-width: 1000px;
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    .logo {
+    .nav-logo {
       display: flex;
       align-items: center;
       gap: 0.75rem;
       text-decoration: none;
-      color: var(--text);
+      color: var(--white);
       font-weight: 700;
       font-size: 1.25rem;
+      letter-spacing: -0.02em;
     }
 
-    .logo-icon {
+    .nav-logo svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .nav-links {
       display: flex;
       align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      background: var(--gradient-primary);
-      border-radius: 10px;
-      font-size: 1.25rem;
-    }
-
-    nav {
-      display: flex;
       gap: 0.5rem;
     }
 
-    nav a {
-      color: var(--text-muted);
+    .nav-links a {
+      color: var(--gray-400);
       text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
       padding: 0.5rem 1rem;
       border-radius: 8px;
-      font-size: 0.95rem;
-      font-weight: 500;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
     }
 
-    nav a:hover {
-      color: var(--purple-500);
-      background: rgba(139, 92, 246, 0.1);
+    .nav-links a:hover {
+      color: var(--white);
+      background: rgba(255,255,255,0.06);
     }
 
-    @media (prefers-color-scheme: dark) {
-      nav a:hover {
-        color: var(--purple-400);
-      }
+    .nav-cta {
+      background: var(--white) !important;
+      color: var(--gray-950) !important;
+      font-weight: 600 !important;
     }
 
+    .nav-cta:hover {
+      background: var(--gray-200) !important;
+    }
+
+    /* ==================== MAIN ==================== */
     main {
-      max-width: var(--max-width);
+      max-width: 900px;
       margin: 0 auto;
-      padding: 4rem 2rem;
+      padding: 8rem 2rem 6rem;
+    }
+
+    .page-header {
+      margin-bottom: 4rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .page-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--violet-500);
+      margin-bottom: 1rem;
     }
 
     h1 {
       font-size: clamp(2.5rem, 5vw, 3.5rem);
       font-weight: 800;
-      margin-bottom: 1rem;
       letter-spacing: -0.03em;
+      margin-bottom: 1rem;
     }
 
-    h1 .gradient {
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .subtitle {
-      font-size: 1.35rem;
-      color: var(--text-secondary);
-      margin-bottom: 4rem;
+    .page-desc {
+      font-size: 1.25rem;
+      color: var(--gray-400);
+      max-width: 600px;
     }
 
     h2 {
       font-size: 1.75rem;
       font-weight: 700;
-      margin-top: 4rem;
-      margin-bottom: 1.25rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--border);
       letter-spacing: -0.02em;
+      margin-top: 4rem;
+      margin-bottom: 1.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
     }
 
     h2:first-of-type {
@@ -201,294 +167,309 @@
       border-top: none;
     }
 
-    h2 .gradient {
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
     h3 {
       font-size: 1.25rem;
-      font-weight: 700;
+      font-weight: 600;
       margin-top: 2.5rem;
       margin-bottom: 1rem;
-      color: var(--text);
+      color: var(--white);
     }
 
     p {
-      color: var(--text-secondary);
+      color: var(--gray-400);
       margin-bottom: 1.25rem;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
+      line-height: 1.7;
     }
 
+    /* ==================== CODE ==================== */
     code {
-      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-family: 'SF Mono', 'Fira Code', monospace;
       font-size: 0.9em;
     }
 
     :not(pre) > code {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
-      padding: 0.25em 0.6em;
+      background: rgba(139, 92, 246, 0.15);
+      color: var(--violet-500);
+      padding: 0.2em 0.5em;
       border-radius: 6px;
-      color: var(--purple-500);
       font-weight: 500;
     }
 
-    @media (prefers-color-scheme: dark) {
-      :not(pre) > code {
-        color: var(--purple-400);
-      }
-    }
-
     pre {
-      background: linear-gradient(180deg, #1A1A2E 0%, #0F0F1A 100%);
-      color: #E2E8F0;
-      padding: 2rem;
-      border-radius: var(--radius);
-      overflow-x: auto;
+      background: linear-gradient(180deg, rgba(24, 24, 27, 0.8) 0%, rgba(9, 9, 11, 0.9) 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      overflow: hidden;
       margin: 1.5rem 0;
-      box-shadow: var(--shadow-lg);
-      border: 1px solid rgba(139, 92, 246, 0.2);
-      position: relative;
     }
 
-    pre::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--gradient-primary);
-      border-radius: var(--radius) var(--radius) 0 0;
+    .code-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.25rem;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
+
+    .code-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .code-dot:nth-child(1) { background: #ff5f57; }
+    .code-dot:nth-child(2) { background: #febc2e; }
+    .code-dot:nth-child(3) { background: #28c840; }
 
     pre code {
-      background: none;
-      color: inherit;
-      padding: 0;
-      font-size: 0.95rem;
+      display: block;
+      padding: 1.5rem;
+      overflow-x: auto;
+      font-size: 0.9rem;
       line-height: 1.7;
+      color: var(--gray-300);
+      background: none;
     }
 
-    .token-keyword { color: #C678DD; }
-    .token-string { color: #98C379; }
-    .token-comment { color: #5C6370; font-style: italic; }
-    .token-function { color: #61AFEF; }
-    .token-type { color: #E5C07B; }
+    .comment { color: var(--gray-600); }
+    .keyword { color: #c678dd; }
+    .string { color: #98c379; }
+    .function { color: #61afef; }
+    .property { color: #e5c07b; }
+    .type { color: #e5c07b; }
 
-    ul, ol {
-      margin: 1.25rem 0 1.25rem 1.5rem;
-      color: var(--text-secondary);
-    }
-
-    li {
-      margin-bottom: 0.6rem;
-      font-size: 1.05rem;
-    }
-
+    /* ==================== TABLE ==================== */
     table {
       width: 100%;
       border-collapse: collapse;
       margin: 1.5rem 0;
-      border-radius: var(--radius);
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: var(--shadow-sm);
     }
 
     th, td {
       text-align: left;
       padding: 1rem 1.25rem;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
     th {
       font-weight: 600;
-      color: var(--text);
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gray-400);
+      background: rgba(255,255,255,0.03);
     }
 
     td {
-      color: var(--text-secondary);
-      background: var(--glass);
+      color: var(--gray-300);
     }
 
     tr:last-child td {
       border-bottom: none;
     }
 
+    /* ==================== NOTE ==================== */
     .note {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%);
-      border-left: 4px solid var(--purple-500);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 12px;
       padding: 1.25rem 1.5rem;
-      border-radius: 0 var(--radius) var(--radius) 0;
       margin: 2rem 0;
     }
 
     .note p {
       margin: 0;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
 
     .note strong {
-      color: var(--purple-500);
+      color: var(--violet-500);
     }
 
-    @media (prefers-color-scheme: dark) {
-      .note strong {
-        color: var(--purple-400);
-      }
+    /* ==================== LISTS ==================== */
+    ul, ol {
+      margin: 1.25rem 0 1.25rem 1.5rem;
+      color: var(--gray-400);
     }
 
+    li {
+      margin-bottom: 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    /* ==================== FOOTER ==================== */
     footer {
-      border-top: 1px solid var(--border);
-      padding: 2.5rem 2rem;
-      text-align: center;
-      background: var(--bg-secondary);
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin-top: 4rem;
     }
 
-    footer a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-
-    footer a:hover {
-      color: var(--purple-500);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      footer a:hover {
-        color: var(--purple-400);
-      }
-    }
-
-    .footer-copy {
-      color: var(--text-muted);
-      font-size: 0.95rem;
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .footer-links {
       display: flex;
-      justify-content: center;
       gap: 2rem;
-      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--gray-500);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--white);
+    }
+
+    .footer-copy {
+      color: var(--gray-600);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .footer-inner {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="bg-grid"></div>
-
-  <header>
-    <div class="header-inner">
-      <a href="/" class="logo">
-        <div class="logo-icon">📦</div>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <svg viewBox="0 0 64 64" fill="none">
+          <defs>
+            <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#8b5cf6"/>
+              <stop offset="100%" stop-color="#f97316"/>
+            </linearGradient>
+          </defs>
+          <path d="M8 24 L32 12 L56 24 L56 48 L32 60 L8 48 Z" fill="url(#g1)"/>
+          <path d="M8 24 L32 36 L32 60 L8 48 Z" fill="rgba(0,0,0,0.2)"/>
+        </svg>
         Weblet
       </a>
-      <nav>
-        <a href="https://github.com/jeffrschneider/weblet">GitHub</a>
-        <a href="https://github.com/jeffrschneider/weblet/blob/master/specifications/Weblet-Specification-V1-0-0.md">Spec</a>
+      <div class="nav-links">
+        <a href="https://github.com/jeffrschneider/weblet/blob/master/specifications/Weblet-Specification-V1-0-0.md">Docs</a>
         <a href="https://github.com/jeffrschneider/weblet/tree/master/examples">Examples</a>
-      </nav>
+        <a href="integration.html">API</a>
+        <a href="https://github.com/jeffrschneider/weblet" class="nav-cta">GitHub</a>
+      </div>
     </div>
-  </header>
+  </nav>
 
   <main>
-    <h1><span class="gradient">Integration</span> Guide</h1>
-    <p class="subtitle">How to integrate weblet into your app or platform.</p>
+    <div class="page-header">
+      <div class="page-label">API Reference</div>
+      <h1>Integration Guide</h1>
+      <p class="page-desc">Programmatic API for validating, serving, and capturing screenshots of weblets.</p>
+    </div>
 
     <h2>Installation</h2>
     <p>Install weblet as a dependency:</p>
-<pre><code>bun add weblet
-<span class="token-comment"># or</span>
+    <pre><div class="code-header"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><code>bun add weblet
+<span class="comment"># or</span>
 npm install weblet</code></pre>
 
-    <h2>Quick <span class="gradient">Example</span></h2>
-    <p>Here's a complete example of validating a weblet, serving it, and capturing screenshots:</p>
-<pre><code><span class="token-keyword">import</span> {
+    <h2>Quick Example</h2>
+    <p>Validate, serve, and capture screenshots in a few lines:</p>
+    <pre><div class="code-header"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><code><span class="keyword">import</span> {
   validateWeblet,
   getWebletInfo,
   serveWeblet,
   captureScreenshots,
-} <span class="token-keyword">from</span> <span class="token-string">'weblet'</span>;
+} <span class="keyword">from</span> <span class="string">'weblet'</span>;
 
-<span class="token-comment">// 1. Validate the weblet</span>
-<span class="token-keyword">const</span> validation = <span class="token-keyword">await</span> <span class="token-function">validateWeblet</span>(<span class="token-string">'./my-app'</span>);
-<span class="token-keyword">if</span> (!validation.valid) {
-  console.error(<span class="token-string">'Invalid weblet:'</span>, validation.errors);
+<span class="comment">// 1. Validate the weblet</span>
+<span class="keyword">const</span> validation = <span class="keyword">await</span> <span class="function">validateWeblet</span>(<span class="string">'./my-app'</span>);
+<span class="keyword">if</span> (!validation.valid) {
+  console.error(<span class="string">'Invalid:'</span>, validation.errors);
   process.exit(1);
 }
 
-<span class="token-comment">// 2. Get manifest info</span>
-<span class="token-keyword">const</span> manifest = <span class="token-keyword">await</span> <span class="token-function">getWebletInfo</span>(<span class="token-string">'./my-app'</span>);
-console.log(<span class="token-string">`Loaded: ${manifest.name}`</span>);
+<span class="comment">// 2. Get manifest info</span>
+<span class="keyword">const</span> manifest = <span class="keyword">await</span> <span class="function">getWebletInfo</span>(<span class="string">'./my-app'</span>);
+console.log(<span class="string">`Loaded: ${manifest.name}`</span>);
 
-<span class="token-comment">// 3. Start the server</span>
-<span class="token-keyword">const</span> server = <span class="token-keyword">await</span> <span class="token-function">serveWeblet</span>(<span class="token-string">'./my-app'</span>, { port: 3000 });
-console.log(<span class="token-string">`Running at ${server.url}`</span>);
+<span class="comment">// 3. Start the server</span>
+<span class="keyword">const</span> server = <span class="keyword">await</span> <span class="function">serveWeblet</span>(<span class="string">'./my-app'</span>, { port: 3000 });
+console.log(<span class="string">`Running at ${server.url}`</span>);
 
-<span class="token-comment">// 4. Capture screenshots</span>
-<span class="token-keyword">const</span> screenshots = <span class="token-keyword">await</span> <span class="token-function">captureScreenshots</span>(<span class="token-string">'./my-app'</span>, {
-  output: <span class="token-string">'./previews'</span>,
-  sizes: [<span class="token-string">'desktop'</span>, <span class="token-string">'mobile'</span>],
+<span class="comment">// 4. Capture screenshots</span>
+<span class="keyword">const</span> shots = <span class="keyword">await</span> <span class="function">captureScreenshots</span>(<span class="string">'./my-app'</span>, {
+  output: <span class="string">'./previews'</span>,
+  sizes: [<span class="string">'desktop'</span>, <span class="string">'mobile'</span>],
 });
-console.log(<span class="token-string">'Saved:'</span>, screenshots.files);
 
-<span class="token-comment">// 5. Clean up</span>
-<span class="token-keyword">await</span> server.<span class="token-function">stop</span>();</code></pre>
+<span class="comment">// 5. Clean up</span>
+<span class="keyword">await</span> server.<span class="function">stop</span>();</code></pre>
 
-    <h2>API <span class="gradient">Reference</span></h2>
+    <h2>API Reference</h2>
 
     <h3>validateWeblet(path)</h3>
     <p>Parse and validate a weblet's APP.md manifest.</p>
-<pre><code><span class="token-keyword">const</span> result = <span class="token-keyword">await</span> <span class="token-function">validateWeblet</span>(<span class="token-string">'./my-app'</span>);
+    <pre><div class="code-header"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><code><span class="keyword">const</span> result = <span class="keyword">await</span> <span class="function">validateWeblet</span>(<span class="string">'./my-app'</span>);
 
-<span class="token-comment">// result.valid: boolean</span>
-<span class="token-comment">// result.errors: string[]</span>
-<span class="token-comment">// result.warnings: string[]</span>
-<span class="token-comment">// result.manifest?: ParsedManifest (if valid)</span></code></pre>
+<span class="comment">// result.valid: boolean</span>
+<span class="comment">// result.errors: string[]</span>
+<span class="comment">// result.warnings: string[]</span>
+<span class="comment">// result.manifest?: ParsedManifest</span></code></pre>
 
     <h3>getWebletInfo(path)</h3>
-    <p>Get the parsed manifest for a weblet. Throws if invalid.</p>
-<pre><code><span class="token-keyword">const</span> manifest = <span class="token-keyword">await</span> <span class="token-function">getWebletInfo</span>(<span class="token-string">'./my-app'</span>);
+    <p>Get the parsed manifest. Throws if invalid.</p>
+    <pre><div class="code-header"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><code><span class="keyword">const</span> manifest = <span class="keyword">await</span> <span class="function">getWebletInfo</span>(<span class="string">'./my-app'</span>);
 
-<span class="token-comment">// manifest.name: string</span>
-<span class="token-comment">// manifest.description?: string</span>
-<span class="token-comment">// manifest.version?: string</span>
-<span class="token-comment">// manifest.runtime: 'browser' | 'bun' | 'node' | 'deno'</span>
-<span class="token-comment">// manifest.agent?: { ... }</span></code></pre>
+<span class="comment">// manifest.name: string</span>
+<span class="comment">// manifest.description?: string</span>
+<span class="comment">// manifest.version?: string</span>
+<span class="comment">// manifest.runtime: 'browser' | 'bun' | 'node' | 'deno'</span>
+<span class="comment">// manifest.agent?: { ... }</span></code></pre>
 
     <h3>serveWeblet(path, options?)</h3>
-    <p>Start a weblet server. Returns a handle to control it.</p>
-<pre><code><span class="token-keyword">const</span> server = <span class="token-keyword">await</span> <span class="token-function">serveWeblet</span>(<span class="token-string">'./my-app'</span>, {
-  port: 3000,        <span class="token-comment">// default: 3000</span>
-  hostname: <span class="token-string">'localhost'</span>,
-  open: <span class="token-keyword">false</span>,       <span class="token-comment">// open browser?</span>
+    <p>Start a weblet server.</p>
+    <pre><div class="code-header"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><code><span class="keyword">const</span> server = <span class="keyword">await</span> <span class="function">serveWeblet</span>(<span class="string">'./my-app'</span>, {
+  port: 3000,
+  hostname: <span class="string">'localhost'</span>,
+  open: <span class="keyword">false</span>,
 });
 
-<span class="token-comment">// server.url: string (e.g., 'http://localhost:3000')</span>
-<span class="token-comment">// server.stop(): Promise&lt;void&gt;</span>
-<span class="token-comment">// server.isRunning(): boolean</span></code></pre>
+<span class="comment">// server.url: string</span>
+<span class="comment">// server.stop(): Promise&lt;void&gt;</span>
+<span class="comment">// server.isRunning(): boolean</span></code></pre>
 
     <h3>captureScreenshots(path, options?)</h3>
-    <p>Capture screenshots of a weblet at various viewport sizes.</p>
-<pre><code><span class="token-keyword">const</span> result = <span class="token-keyword">await</span> <span class="token-function">captureScreenshots</span>(<span class="token-string">'./my-app'</span>, {
-  output: <span class="token-string">'./screenshots'</span>,  <span class="token-comment">// default: ~/.weblet/screenshots/&lt;name&gt;/</span>
-  sizes: [<span class="token-string">'desktop'</span>, <span class="token-string">'mobile'</span>],  <span class="token-comment">// viewport presets or WxH</span>
-  animated: <span class="token-keyword">false</span>,           <span class="token-comment">// capture GIF?</span>
-  duration: 5,               <span class="token-comment">// GIF duration in seconds</span>
-  fps: 10,                   <span class="token-comment">// GIF frame rate</span>
-  wait: 1000,                <span class="token-comment">// ms to wait after page load</span>
-  route: <span class="token-string">'/'</span>,               <span class="token-comment">// route to capture</span>
+    <p>Capture screenshots at various viewport sizes.</p>
+    <pre><div class="code-header"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><code><span class="keyword">const</span> result = <span class="keyword">await</span> <span class="function">captureScreenshots</span>(<span class="string">'./my-app'</span>, {
+  output: <span class="string">'./screenshots'</span>,
+  sizes: [<span class="string">'desktop'</span>, <span class="string">'mobile'</span>],
+  animated: <span class="keyword">false</span>,
+  duration: 5,
+  fps: 10,
+  wait: 1000,
+  route: <span class="string">'/'</span>,
 });
 
-<span class="token-comment">// result.files: string[] (paths to screenshots)</span>
-<span class="token-comment">// result.outputDir: string</span>
-<span class="token-comment">// result.appName: string</span></code></pre>
+<span class="comment">// result.files: string[]</span>
+<span class="comment">// result.outputDir: string</span>
+<span class="comment">// result.appName: string</span></code></pre>
 
-    <h2>Screenshot <span class="gradient">Options</span></h2>
+    <h2>Screenshot Options</h2>
 
     <h3>Viewport Presets</h3>
     <table>
@@ -505,106 +486,69 @@ console.log(<span class="token-string">'Saved:'</span>, screenshots.files);
         <tr><td><code>wide</code></td><td>1920 x 1080</td></tr>
       </tbody>
     </table>
-    <p>You can also use custom dimensions: <code>'800x600'</code></p>
+    <p>Custom dimensions: <code>'800x600'</code></p>
 
     <h3>Animated GIFs</h3>
-    <p>To capture animated previews:</p>
-<pre><code><span class="token-keyword">const</span> result = <span class="token-keyword">await</span> <span class="token-function">captureScreenshots</span>(<span class="token-string">'./my-app'</span>, {
-  animated: <span class="token-keyword">true</span>,
-  duration: 5,     <span class="token-comment">// 5 second GIF</span>
-  fps: 10,         <span class="token-comment">// 10 frames per second</span>
+    <pre><div class="code-header"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><code><span class="keyword">const</span> result = <span class="keyword">await</span> <span class="function">captureScreenshots</span>(<span class="string">'./my-app'</span>, {
+  animated: <span class="keyword">true</span>,
+  duration: 5,
+  fps: 10,
 });</code></pre>
 
     <div class="note">
-      <p><strong>Note:</strong> Animated GIF generation requires ffmpeg to be installed on your system. Without ffmpeg, the feature will log a warning and skip GIF creation.</p>
+      <p><strong>Note:</strong> Animated GIF generation requires ffmpeg. Without it, GIF creation is skipped with a warning.</p>
     </div>
 
-    <h2>Use <span class="gradient">Cases</span></h2>
+    <h2>Use Cases</h2>
 
     <h3>App Builder Platform</h3>
-    <p>A platform that lets users describe apps, generates weblets, and shows previews:</p>
-<pre><code><span class="token-comment">// User describes what they want...</span>
-<span class="token-comment">// AI generates the weblet...</span>
-
-<span class="token-comment">// Validate it worked</span>
-<span class="token-keyword">const</span> { valid, errors } = <span class="token-keyword">await</span> <span class="token-function">validateWeblet</span>(outputPath);
-<span class="token-keyword">if</span> (!valid) {
-  <span class="token-keyword">return</span> { success: <span class="token-keyword">false</span>, errors };
+    <pre><div class="code-header"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><code><span class="comment">// Validate generated weblet</span>
+<span class="keyword">const</span> { valid, errors } = <span class="keyword">await</span> <span class="function">validateWeblet</span>(outputPath);
+<span class="keyword">if</span> (!valid) {
+  <span class="keyword">return</span> { success: <span class="keyword">false</span>, errors };
 }
 
-<span class="token-comment">// Get preview images</span>
-<span class="token-keyword">const</span> { files } = <span class="token-keyword">await</span> <span class="token-function">captureScreenshots</span>(outputPath, {
-  output: <span class="token-string">`./previews/${userId}`</span>,
-  sizes: [<span class="token-string">'desktop'</span>, <span class="token-string">'mobile'</span>],
+<span class="comment">// Generate preview images</span>
+<span class="keyword">const</span> { files } = <span class="keyword">await</span> <span class="function">captureScreenshots</span>(outputPath, {
+  output: <span class="string">`./previews/${userId}`</span>,
+  sizes: [<span class="string">'desktop'</span>, <span class="string">'mobile'</span>],
 });
 
-<span class="token-keyword">return</span> {
-  success: <span class="token-keyword">true</span>,
-  previews: files,
-};</code></pre>
-
-    <h3>Weblet Marketplace</h3>
-    <p>A registry that indexes and showcases weblets:</p>
-<pre><code><span class="token-comment">// On weblet submission...</span>
-<span class="token-keyword">const</span> manifest = <span class="token-keyword">await</span> <span class="token-function">getWebletInfo</span>(submittedPath);
-
-<span class="token-comment">// Index it</span>
-<span class="token-keyword">await</span> db.weblets.<span class="token-function">create</span>({
-  name: manifest.name,
-  description: manifest.description,
-  version: manifest.version,
-  runtime: manifest.runtime,
-  triggers: manifest.agent?.triggers,
-});
-
-<span class="token-comment">// Generate listing images</span>
-<span class="token-keyword">await</span> <span class="token-function">captureScreenshots</span>(submittedPath, {
-  output: <span class="token-string">`./cdn/weblets/${manifest.name}`</span>,
-  sizes: [<span class="token-string">'desktop'</span>],
-  animated: <span class="token-keyword">true</span>,
-  duration: 3,
-});</code></pre>
+<span class="keyword">return</span> { success: <span class="keyword">true</span>, previews: files };</code></pre>
 
     <h3>CI/CD Pipeline</h3>
-    <p>Validate weblets in your build process:</p>
-<pre><code><span class="token-comment">// In your test/build script</span>
-<span class="token-keyword">import</span> { validateWeblet } <span class="token-keyword">from</span> <span class="token-string">'weblet'</span>;
+    <pre><div class="code-header"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><code><span class="keyword">import</span> { validateWeblet } <span class="keyword">from</span> <span class="string">'weblet'</span>;
 
-<span class="token-keyword">const</span> result = <span class="token-keyword">await</span> <span class="token-function">validateWeblet</span>(<span class="token-string">'./dist'</span>);
+<span class="keyword">const</span> result = <span class="keyword">await</span> <span class="function">validateWeblet</span>(<span class="string">'./dist'</span>);
 
-<span class="token-keyword">if</span> (!result.valid) {
-  console.error(<span class="token-string">'Weblet validation failed:'</span>);
-  result.errors.<span class="token-function">forEach</span>(e => console.error(<span class="token-string">`  - ${e}`</span>));
+<span class="keyword">if</span> (!result.valid) {
+  console.error(<span class="string">'Validation failed:'</span>);
+  result.errors.<span class="function">forEach</span>(e => console.error(<span class="string">`  - ${e}`</span>));
   process.exit(1);
 }
 
-<span class="token-keyword">if</span> (result.warnings.length > 0) {
-  console.warn(<span class="token-string">'Warnings:'</span>);
-  result.warnings.<span class="token-function">forEach</span>(w => console.warn(<span class="token-string">`  - ${w}`</span>));
-}
+console.log(<span class="string">'Weblet is valid!'</span>);</code></pre>
 
-console.log(<span class="token-string">'Weblet is valid!'</span>);</code></pre>
-
-    <h2>TypeScript <span class="gradient">Types</span></h2>
-    <p>All types are exported for TypeScript users:</p>
-<pre><code><span class="token-keyword">import</span> <span class="token-keyword">type</span> {
-  <span class="token-type">ServeOptions</span>,
-  <span class="token-type">ScreenshotOptions</span>,
-  <span class="token-type">ScreenshotResult</span>,
-  <span class="token-type">ValidationResult</span>,
-  <span class="token-type">WebletServerHandle</span>,
-  <span class="token-type">ParsedManifest</span>,
-} <span class="token-keyword">from</span> <span class="token-string">'weblet'</span>;</code></pre>
-
+    <h2>TypeScript Types</h2>
+    <pre><div class="code-header"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><code><span class="keyword">import</span> <span class="keyword">type</span> {
+  <span class="type">ServeOptions</span>,
+  <span class="type">ScreenshotOptions</span>,
+  <span class="type">ScreenshotResult</span>,
+  <span class="type">ValidationResult</span>,
+  <span class="type">WebletServerHandle</span>,
+  <span class="type">ParsedManifest</span>,
+} <span class="keyword">from</span> <span class="string">'weblet'</span>;</code></pre>
   </main>
 
   <footer>
-    <div class="footer-links">
-      <a href="/">Home</a>
-      <a href="https://github.com/jeffrschneider/weblet">GitHub</a>
-      <a href="https://github.com/jeffrschneider/weblet/issues">Issues</a>
+    <div class="footer-inner">
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="https://github.com/jeffrschneider/weblet">GitHub</a>
+        <a href="https://github.com/jeffrschneider/weblet/issues">Issues</a>
+      </div>
+      <p class="footer-copy">MIT License</p>
     </div>
-    <p class="footer-copy">MIT License · Built for the AI agent ecosystem</p>
   </footer>
 </body>
 </html>

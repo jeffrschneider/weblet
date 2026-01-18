@@ -3,179 +3,223 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weblet - Self-contained web apps for AI agents</title>
+  <title>Weblet - The UI Layer for AI Agents</title>
   <meta name="description" content="Build portable web apps that work with AI agents. No build step. No dependency hell. Just files that work.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root {
-      /* Bold color palette */
-      --purple-400: #A855F7;
-      --purple-500: #8B5CF6;
-      --purple-600: #7C3AED;
-      --purple-700: #6D28D9;
-      --coral-400: #FB923C;
-      --coral-500: #F97316;
-      --cyan-400: #22D3EE;
-      --cyan-500: #06B6D4;
-      --emerald-400: #34D399;
-      --emerald-500: #10B981;
-
-      /* Light theme */
-      --bg: #FAFAFA;
-      --bg-secondary: #FFFFFF;
-      --bg-card: rgba(255, 255, 255, 0.7);
-      --text: #1A1A2E;
-      --text-secondary: #4A4A68;
-      --text-muted: #6B7280;
-      --border: rgba(139, 92, 246, 0.15);
-      --border-strong: rgba(139, 92, 246, 0.3);
-
-      /* Gradients */
-      --gradient-hero: linear-gradient(135deg, #1A1A2E 0%, #2D1B4E 50%, #1A1A2E 100%);
-      --gradient-primary: linear-gradient(135deg, var(--purple-500) 0%, var(--coral-500) 100%);
-      --gradient-secondary: linear-gradient(135deg, var(--cyan-500) 0%, var(--purple-500) 100%);
-      --gradient-text: linear-gradient(135deg, var(--purple-400) 0%, var(--coral-400) 50%, var(--cyan-400) 100%);
-
-      /* Effects */
-      --shadow-sm: 0 2px 8px rgba(139, 92, 246, 0.08);
-      --shadow-md: 0 4px 20px rgba(139, 92, 246, 0.12);
-      --shadow-lg: 0 8px 40px rgba(139, 92, 246, 0.16);
-      --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.3);
-      --glass: rgba(255, 255, 255, 0.8);
-      --glass-border: rgba(255, 255, 255, 0.5);
-
-      /* Layout */
-      --max-width: 1100px;
-      --radius: 16px;
-      --radius-lg: 24px;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0A0A0F;
-        --bg-secondary: #12121A;
-        --bg-card: rgba(26, 26, 46, 0.6);
-        --text: #F8FAFC;
-        --text-secondary: #CBD5E1;
-        --text-muted: #94A3B8;
-        --border: rgba(139, 92, 246, 0.2);
-        --border-strong: rgba(139, 92, 246, 0.4);
-        --glass: rgba(26, 26, 46, 0.7);
-        --glass-border: rgba(139, 92, 246, 0.2);
-        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
-        --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
-      }
-    }
-
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
+    :root {
+      --white: #ffffff;
+      --gray-50: #fafafa;
+      --gray-100: #f4f4f5;
+      --gray-200: #e4e4e7;
+      --gray-300: #d4d4d8;
+      --gray-400: #a1a1aa;
+      --gray-500: #71717a;
+      --gray-600: #52525b;
+      --gray-700: #3f3f46;
+      --gray-800: #27272a;
+      --gray-900: #18181b;
+      --gray-950: #09090b;
+      --violet-500: #8b5cf6;
+      --violet-600: #7c3aed;
+      --orange-500: #f97316;
+      --cyan-400: #22d3ee;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
+      background: var(--gray-950);
+      color: var(--white);
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
     }
 
-    /* Animated background */
-    .bg-grid {
+    /* ==================== NAVIGATION ==================== */
+    nav {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      bottom: 0;
-      background-image:
-        linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-      z-index: -1;
+      z-index: 1000;
+      padding: 1.25rem 2rem;
+      background: rgba(9, 9, 11, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
-    /* Hero Section */
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-links a {
+      color: var(--gray-400);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--white);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .nav-cta {
+      background: var(--white) !important;
+      color: var(--gray-950) !important;
+      font-weight: 600 !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--gray-200) !important;
+    }
+
+    /* ==================== HERO ==================== */
     .hero {
-      background: var(--gradient-hero);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 8rem 2rem 6rem;
       position: relative;
-      padding: 6rem 2rem 5rem;
       overflow: hidden;
     }
 
+    /* Gradient mesh background */
     .hero::before {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
+      top: -40%;
+      left: -20%;
+      width: 140%;
+      height: 140%;
       background:
-        radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 50%, rgba(249, 115, 22, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 50% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 40%);
-      animation: pulse 8s ease-in-out infinite;
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(139, 92, 246, 0.3), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 50%, rgba(249, 115, 22, 0.15), transparent),
+        radial-gradient(ellipse 50% 30% at 20% 60%, rgba(34, 211, 238, 0.1), transparent);
+      pointer-events: none;
     }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1) rotate(0deg); }
-      50% { transform: scale(1.05) rotate(2deg); }
+    /* Grid lines */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black, transparent);
+      pointer-events: none;
     }
 
-    .hero-inner {
-      max-width: var(--max-width);
-      margin: 0 auto;
+    .hero-content {
       position: relative;
       z-index: 1;
-      text-align: center;
+      max-width: 1000px;
     }
 
-    .logo {
+    .hero-badge {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      width: 80px;
-      height: 80px;
-      background: var(--gradient-primary);
-      border-radius: 20px;
-      font-size: 2.5rem;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 100px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--violet-500);
       margin-bottom: 2rem;
-      box-shadow: var(--shadow-glow);
-      animation: float 3s ease-in-out infinite;
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    .hero-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--violet-500);
+      border-radius: 50%;
+      animation: pulse-dot 2s infinite;
     }
 
-    h1 {
-      font-size: clamp(3rem, 8vw, 5rem);
-      font-weight: 800;
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero h1 {
+      font-size: clamp(3.5rem, 10vw, 6rem);
+      font-weight: 900;
+      line-height: 1;
       letter-spacing: -0.04em;
-      margin-bottom: 1rem;
-      color: white;
+      margin-bottom: 1.5rem;
     }
 
-    h1 span {
-      background: var(--gradient-text);
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--white) 0%, var(--gray-400) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    .tagline {
-      font-size: clamp(1.25rem, 3vw, 1.75rem);
-      color: rgba(255, 255, 255, 0.8);
-      margin-bottom: 2.5rem;
-      font-weight: 500;
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, var(--violet-500) 0%, var(--orange-500) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(1.25rem, 3vw, 1.5rem);
+      color: var(--gray-400);
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      line-height: 1.6;
     }
 
     .hero-buttons {
@@ -183,745 +227,701 @@
       gap: 1rem;
       justify-content: center;
       flex-wrap: wrap;
+      margin-bottom: 4rem;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
-      padding: 1rem 2rem;
+      gap: 0.5rem;
+      padding: 1rem 1.75rem;
       border-radius: 12px;
       font-weight: 600;
       font-size: 1rem;
       text-decoration: none;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s;
       border: none;
       cursor: pointer;
     }
 
     .btn-primary {
-      background: var(--gradient-primary);
-      color: white;
-      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+      background: var(--white);
+      color: var(--gray-950);
     }
 
     .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(139, 92, 246, 0.5);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.3);
+      background: var(--gray-200);
       transform: translateY(-2px);
     }
 
-    /* Main Content */
-    main {
-      max-width: var(--max-width);
+    .btn-secondary {
+      background: rgba(255,255,255,0.06);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    /* Code preview in hero */
+    .hero-code {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      text-align: left;
+      max-width: 500px;
       margin: 0 auto;
-      padding: 5rem 2rem;
+      position: relative;
+      overflow: hidden;
     }
 
-    section {
-      margin-bottom: 6rem;
+    .hero-code::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.5), transparent);
     }
 
-    h2 {
-      font-size: clamp(2rem, 4vw, 2.75rem);
+    .hero-code code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.9rem;
+      color: var(--gray-300);
+    }
+
+    .hero-code .dim { color: var(--gray-600); }
+    .hero-code .purple { color: var(--violet-500); }
+    .hero-code .orange { color: var(--orange-500); }
+
+    /* ==================== VALUE PROP ==================== */
+    .value-prop {
+      padding: 8rem 2rem;
+      position: relative;
+    }
+
+    .value-prop-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--violet-500);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
       font-weight: 800;
-      margin-bottom: 1.5rem;
+      line-height: 1.1;
       letter-spacing: -0.03em;
-    }
-
-    h2 .gradient {
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    h3 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-    }
-
-    p {
-      color: var(--text-secondary);
       margin-bottom: 1.5rem;
-      font-size: 1.125rem;
+      max-width: 800px;
     }
 
-    /* Problem/Solution Grid */
-    .two-col {
+    .section-desc {
+      font-size: 1.25rem;
+      color: var(--gray-400);
+      max-width: 600px;
+      margin-bottom: 4rem;
+    }
+
+    /* ==================== BENTO GRID ==================== */
+    .bento {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
     }
 
-    @media (max-width: 768px) {
-      .two-col {
+    @media (max-width: 1024px) {
+      .bento {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .bento {
         grid-template-columns: 1fr;
       }
     }
 
-    .card {
-      padding: 2.5rem;
-      border-radius: var(--radius-lg);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      transition: all 0.3s ease;
+    .bento-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
     }
 
-    .problem-card {
-      background: var(--glass);
-    }
-
-    .solution-card {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);
-      border-color: var(--border-strong);
-    }
-
-    .card:hover {
+    .bento-card:hover {
+      border-color: rgba(255,255,255,0.12);
       transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
     }
 
-    .card-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
-      font-size: 1.75rem;
-      margin-bottom: 1.5rem;
+    .bento-card.featured {
+      grid-column: span 2;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%);
+      border-color: rgba(139, 92, 246, 0.2);
     }
 
-    .problem-card .card-icon {
-      background: linear-gradient(135deg, #EF4444 0%, #F97316 100%);
-    }
-
-    .solution-card .card-icon {
-      background: var(--gradient-primary);
-    }
-
-    .card h3 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .card p {
-      margin-bottom: 0.75rem;
-    }
-
-    .card p:last-child {
-      margin-bottom: 0;
-    }
-
-    /* Code Blocks */
-    code {
-      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-      font-size: 0.9em;
-    }
-
-    :not(pre) > code {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
-      padding: 0.25em 0.6em;
-      border-radius: 6px;
-      color: var(--purple-500);
-      font-weight: 500;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :not(pre) > code {
-        color: var(--purple-400);
+    @media (max-width: 640px) {
+      .bento-card.featured {
+        grid-column: span 1;
       }
     }
 
-    pre {
-      background: linear-gradient(180deg, #1A1A2E 0%, #0F0F1A 100%);
-      color: #E2E8F0;
-      padding: 2rem;
-      border-radius: var(--radius);
-      overflow-x: auto;
-      margin: 2rem 0;
-      box-shadow: var(--shadow-lg);
-      border: 1px solid rgba(139, 92, 246, 0.2);
-      position: relative;
+    .bento-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--violet-600) 0%, var(--violet-500) 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
     }
 
-    pre::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--gradient-primary);
-      border-radius: var(--radius) var(--radius) 0 0;
+    .bento-card:nth-child(2) .bento-icon {
+      background: linear-gradient(135deg, var(--orange-500) 0%, #fb923c 100%);
     }
 
-    pre code {
-      background: none;
-      color: inherit;
-      padding: 0;
-      font-size: 0.95rem;
-      line-height: 1.7;
+    .bento-card:nth-child(3) .bento-icon {
+      background: linear-gradient(135deg, var(--cyan-400) 0%, #06b6d4 100%);
     }
 
-    /* File Tree Styling */
-    .file-tree {
-      background: linear-gradient(180deg, #1A1A2E 0%, #0F0F1A 100%);
-      border-radius: var(--radius);
-      padding: 2rem;
-      margin: 2rem 0;
-      border: 1px solid rgba(139, 92, 246, 0.2);
-      position: relative;
+    .bento-card:nth-child(5) .bento-icon {
+      background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
     }
 
-    .file-tree::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--gradient-secondary);
-      border-radius: var(--radius) var(--radius) 0 0;
+    .bento-card:nth-child(6) .bento-icon {
+      background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%);
     }
 
-    .file-tree code {
-      color: #E2E8F0;
+    .bento-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
     }
 
-    .file-tree .comment {
-      color: #64748B;
+    .bento-card p {
+      color: var(--gray-400);
+      font-size: 1rem;
+      line-height: 1.6;
     }
 
-    /* Feature Grid */
-    .features {
+    /* ==================== HOW IT WORKS ==================== */
+    .how-it-works {
+      padding: 8rem 2rem;
+      background: linear-gradient(180deg, transparent 0%, rgba(139, 92, 246, 0.03) 50%, transparent 100%);
+    }
+
+    .how-it-works-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .steps {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 2.5rem;
+      gap: 2rem;
+      margin-top: 4rem;
     }
 
     @media (max-width: 900px) {
-      .features {
+      .steps {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+    }
+
+    .step {
+      position: relative;
+    }
+
+    .step-num {
+      font-size: 5rem;
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+
+    .step h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .step p {
+      color: var(--gray-400);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    /* ==================== CODE SHOWCASE ==================== */
+    .code-showcase {
+      padding: 8rem 2rem;
+    }
+
+    .code-showcase-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .code-block {
+      background: linear-gradient(180deg, rgba(24, 24, 27, 0.8) 0%, rgba(9, 9, 11, 0.9) 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 3rem;
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 1.5rem;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .code-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--gray-700);
+    }
+
+    .code-dot:nth-child(1) { background: #ff5f57; }
+    .code-dot:nth-child(2) { background: #febc2e; }
+    .code-dot:nth-child(3) { background: #28c840; }
+
+    .code-title {
+      margin-left: 1rem;
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      font-family: 'SF Mono', monospace;
+    }
+
+    .code-content {
+      padding: 2rem;
+      overflow-x: auto;
+    }
+
+    .code-content pre {
+      margin: 0;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--gray-300);
+    }
+
+    .code-content .comment { color: var(--gray-600); }
+    .code-content .keyword { color: #c678dd; }
+    .code-content .string { color: #98c379; }
+    .code-content .function { color: #61afef; }
+    .code-content .property { color: #e5c07b; }
+
+    /* ==================== CTA ==================== */
+    .cta {
+      padding: 8rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta h2 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta p {
+      font-size: 1.25rem;
+      color: var(--gray-400);
+      margin-bottom: 2.5rem;
+    }
+
+    .cta-code {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      display: inline-block;
+      margin-bottom: 3rem;
+    }
+
+    .cta-code code {
+      font-family: 'SF Mono', monospace;
+      font-size: 1rem;
+      color: var(--gray-300);
+    }
+
+    /* ==================== EXAMPLES ==================== */
+    .examples {
+      padding: 6rem 2rem 8rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .examples-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 900px) {
+      .examples-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
     @media (max-width: 600px) {
-      .features {
+      .examples-grid {
         grid-template-columns: 1fr;
       }
     }
 
-    .feature {
-      padding: 2rem;
-      border-radius: var(--radius);
-      background: var(--glass);
-      border: 1px solid var(--border);
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
+    .example-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: var(--white);
+      transition: all 0.2s;
+      display: block;
     }
 
-    .feature:hover {
-      border-color: var(--purple-500);
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md), 0 0 0 1px var(--purple-500);
+    .example-card:hover {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-2px);
     }
 
-    .feature-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      background: var(--gradient-primary);
-    }
-
-    .feature:nth-child(2) .feature-icon { background: var(--gradient-secondary); }
-    .feature:nth-child(3) .feature-icon { background: linear-gradient(135deg, var(--coral-500) 0%, var(--purple-500) 100%); }
-    .feature:nth-child(4) .feature-icon { background: linear-gradient(135deg, var(--emerald-500) 0%, var(--cyan-500) 100%); }
-    .feature:nth-child(5) .feature-icon { background: linear-gradient(135deg, var(--purple-600) 0%, var(--purple-400) 100%); }
-    .feature:nth-child(6) .feature-icon { background: linear-gradient(135deg, var(--cyan-500) 0%, var(--emerald-500) 100%); }
-
-    .feature h3 {
+    .example-card h4 {
+      font-weight: 600;
       margin-bottom: 0.5rem;
     }
 
-    .feature p {
-      font-size: 1rem;
-      margin: 0;
-      color: var(--text-muted);
+    .example-card p {
+      font-size: 0.9rem;
+      color: var(--gray-500);
     }
 
-    /* Examples Grid */
-    .examples {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.25rem;
-      margin-top: 2rem;
+    /* ==================== FOOTER ==================== */
+    footer {
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     @media (max-width: 600px) {
-      .examples {
-        grid-template-columns: 1fr;
+      .footer-inner {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
       }
-    }
-
-    .example {
-      display: flex;
-      align-items: flex-start;
-      gap: 1.25rem;
-      padding: 1.5rem;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      text-decoration: none;
-      color: var(--text);
-      transition: all 0.3s ease;
-      background: var(--glass);
-      backdrop-filter: blur(10px);
-    }
-
-    .example:hover {
-      border-color: var(--purple-500);
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .example-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      font-size: 1.5rem;
-      background: var(--gradient-primary);
-      flex-shrink: 0;
-    }
-
-    .example:nth-child(2) .example-icon { background: var(--gradient-secondary); }
-    .example:nth-child(3) .example-icon { background: linear-gradient(135deg, var(--coral-500) 0%, #EC4899 100%); }
-    .example:nth-child(4) .example-icon { background: linear-gradient(135deg, var(--emerald-500) 0%, var(--cyan-500) 100%); }
-    .example:nth-child(5) .example-icon { background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%); }
-    .example:nth-child(6) .example-icon { background: linear-gradient(135deg, var(--cyan-500) 0%, var(--purple-500) 100%); }
-
-    .example-content h3 {
-      color: var(--purple-500);
-      margin-bottom: 0.25rem;
-      font-size: 1.125rem;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .example-content h3 {
-        color: var(--purple-400);
-      }
-    }
-
-    .example-content p {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin: 0;
-    }
-
-    /* Quick Start Section */
-    .quickstart {
-      background: var(--gradient-hero);
-      border-radius: var(--radius-lg);
-      padding: 3rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .quickstart::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(139, 92, 246, 0.2) 0%, transparent 50%),
-        radial-gradient(circle at 100% 100%, rgba(249, 115, 22, 0.15) 0%, transparent 50%);
-    }
-
-    .quickstart > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .quickstart h2 {
-      color: white;
-      margin-bottom: 1rem;
-    }
-
-    .quickstart p {
-      color: rgba(255, 255, 255, 0.8);
-      margin-bottom: 1.5rem;
-    }
-
-    .quickstart pre {
-      background: rgba(0, 0, 0, 0.4);
-      border-color: rgba(255, 255, 255, 0.1);
-      margin: 0;
-    }
-
-    /* Platform Section */
-    .platform-section pre {
-      margin-top: 1.5rem;
-    }
-
-    .platform-section .link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--purple-500);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1.125rem;
-      transition: all 0.2s ease;
-    }
-
-    .platform-section .link:hover {
-      gap: 0.75rem;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .platform-section .link {
-        color: var(--purple-400);
-      }
-    }
-
-    /* Related Links */
-    .related-links {
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .related-link {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1.25rem 1.75rem;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      text-decoration: none;
-      color: var(--text);
-      transition: all 0.3s ease;
-      background: var(--glass);
-      backdrop-filter: blur(10px);
-    }
-
-    .related-link:hover {
-      border-color: var(--purple-500);
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .related-link-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      font-size: 1.5rem;
-      background: var(--gradient-primary);
-    }
-
-    .related-link:nth-child(2) .related-link-icon {
-      background: var(--gradient-secondary);
-    }
-
-    .related-link strong {
-      display: block;
-      font-size: 1.125rem;
-      margin-bottom: 0.25rem;
-    }
-
-    .related-link p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin: 0;
-    }
-
-    /* Footer */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 3rem 2rem;
-      text-align: center;
-      background: var(--bg-secondary);
     }
 
     .footer-links {
       display: flex;
-      justify-content: center;
-      gap: 2.5rem;
-      margin-bottom: 1.5rem;
+      gap: 2rem;
     }
 
-    footer a {
-      color: var(--text-muted);
+    .footer-links a {
+      color: var(--gray-500);
       text-decoration: none;
-      font-weight: 500;
-      transition: all 0.2s ease;
+      font-size: 0.9rem;
+      transition: color 0.2s;
     }
 
-    footer a:hover {
-      color: var(--purple-500);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      footer a:hover {
-        color: var(--purple-400);
-      }
+    .footer-links a:hover {
+      color: var(--white);
     }
 
     .footer-copy {
-      color: var(--text-muted);
-      font-size: 0.95rem;
+      color: var(--gray-600);
+      font-size: 0.9rem;
     }
-
-    /* Syntax colors for code */
-    .token-keyword { color: #C678DD; }
-    .token-string { color: #98C379; }
-    .token-comment { color: #5C6370; font-style: italic; }
-    .token-function { color: #61AFEF; }
   </style>
 </head>
 <body>
-  <div class="bg-grid"></div>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <svg viewBox="0 0 64 64" fill="none">
+          <defs>
+            <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#8b5cf6"/>
+              <stop offset="100%" stop-color="#f97316"/>
+            </linearGradient>
+          </defs>
+          <path d="M8 24 L32 12 L56 24 L56 48 L32 60 L8 48 Z" fill="url(#g1)"/>
+          <path d="M8 24 L32 36 L32 60 L8 48 Z" fill="rgba(0,0,0,0.2)"/>
+        </svg>
+        Weblet
+      </a>
+      <div class="nav-links">
+        <a href="https://github.com/jeffrschneider/weblet/blob/master/specifications/Weblet-Specification-V1-0-0.md">Docs</a>
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples">Examples</a>
+        <a href="integration.html">API</a>
+        <a href="https://github.com/jeffrschneider/weblet" class="nav-cta">GitHub</a>
+      </div>
+    </div>
+  </nav>
 
   <!-- Hero -->
-  <div class="hero">
-    <div class="hero-inner">
-      <div class="logo">📦</div>
-      <h1><span>Weblet</span></h1>
-      <p class="tagline">The UI layer for AI agents</p>
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Now in public beta</div>
+      <h1>
+        <span class="gradient">Give your AI agents</span><br>
+        <span class="highlight">a face.</span>
+      </h1>
+      <p class="hero-sub">
+        Weblets are portable, self-contained web apps that AI agents can generate,
+        launch with data, and communicate with. No build step. No dependencies.
+      </p>
       <div class="hero-buttons">
         <a href="https://github.com/jeffrschneider/weblet" class="btn btn-primary">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          GitHub
-        </a>
-        <a href="https://github.com/jeffrschneider/weblet/blob/master/specifications/Weblet-Specification-V1-0-0.md" class="btn btn-secondary">
-          Read the Spec
+          Get Started
         </a>
         <a href="integration.html" class="btn btn-secondary">
-          Integration Guide
+          View API Docs
         </a>
       </div>
+      <div class="hero-code">
+        <code>
+          <span class="dim">my-app/</span><br>
+          <span class="dim">├──</span> <span class="purple">APP.md</span><br>
+          <span class="dim">├──</span> <span class="orange">index.html</span><br>
+          <span class="dim">└──</span> <span class="dim">...</span>
+        </code>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <main>
-    <!-- Problem / Solution -->
-    <section>
-      <div class="two-col">
-        <div class="card problem-card">
-          <div class="card-icon">🤔</div>
-          <h3>The Problem</h3>
-          <p>AI agents are getting powerful, but they're trapped in text. When they need to show you data, visualizations, or interactive tools &mdash; they're stuck.</p>
-          <p>Agents need a way to create UI.</p>
-        </div>
-        <div class="card solution-card">
-          <div class="card-icon">✨</div>
-          <h3>The Solution</h3>
-          <p>A <strong>weblet</strong> is a portable web app that agents can generate, launch with data, and communicate with.</p>
-          <p>The skill provides the brain. The weblet provides the face.</p>
-        </div>
-      </div>
-    </section>
+  <!-- Value Prop -->
+  <section class="value-prop">
+    <div class="value-prop-inner">
+      <div class="section-label">Why Weblets</div>
+      <h2 class="section-title">AI agents are powerful.<br>But they're trapped in text.</h2>
+      <p class="section-desc">
+        When agents need to show data, visualizations, or interactive tools—they're stuck.
+        Weblets give them a way to create real UI.
+      </p>
 
-    <!-- Structure -->
-    <section>
-      <h2>Dead <span class="gradient">Simple</span> Structure</h2>
-      <p>Every weblet is just a folder with an <code>APP.md</code> manifest and your code.</p>
-      <div class="file-tree">
-<pre><code>my-app/
-├── APP.md          <span class="comment"># Describes your app</span>
-├── index.html      <span class="comment"># Entry point</span>
-└── (your code)     <span class="comment"># Whatever you need</span></code></pre>
-      </div>
-      <p>Open <code>index.html</code> in a browser, and it runs. Want TypeScript? Use Bun &mdash; it transpiles on the fly. Want to share it? Zip the folder.</p>
-    </section>
-
-    <!-- Features -->
-    <section>
-      <h2>Why <span class="gradient">Weblets</span>?</h2>
-      <div class="features">
-        <div class="feature">
-          <div class="feature-icon">🤖</div>
-          <h3>Agent-Native</h3>
-          <p>Agents can pass data in and receive events back via a simple convention.</p>
+      <div class="bento">
+        <div class="bento-card featured">
+          <div class="bento-icon">🤖</div>
+          <h3>Agent-Native Protocol</h3>
+          <p>Agents inject context via <code>window.__AGENT_CONTEXT__</code>. The weblet reads data in, emits events back out. A two-way channel between AI and UI.</p>
         </div>
-        <div class="feature">
-          <div class="feature-icon">🎯</div>
+        <div class="bento-card">
+          <div class="bento-icon">🎯</div>
           <h3>AI-Generatable</h3>
-          <p>Simple structure that AI assistants can create correctly every time.</p>
+          <p>Simple enough that any LLM can scaffold a working app in seconds. No complex configs to mess up.</p>
         </div>
-        <div class="feature">
-          <div class="feature-icon">📦</div>
-          <h3>Portable</h3>
-          <p>Self-contained folder. Zip it, git it, or deploy anywhere.</p>
+        <div class="bento-card">
+          <div class="bento-icon">📦</div>
+          <h3>Fully Portable</h3>
+          <p>Just a folder. Zip it, git it, deploy anywhere. No node_modules, no build artifacts.</p>
         </div>
-        <div class="feature">
-          <div class="feature-icon">🔌</div>
-          <h3>Works Standalone</h3>
-          <p>Gracefully degrades when no agent is present. Always functional.</p>
+        <div class="bento-card featured">
+          <div class="bento-icon">🔌</div>
+          <h3>Standalone Compatible</h3>
+          <p>Gracefully degrades when no agent is present. Open index.html in a browser and it works. Always functional, never broken.</p>
         </div>
-        <div class="feature">
-          <div class="feature-icon">🚀</div>
+        <div class="bento-card">
+          <div class="bento-icon">🚀</div>
           <h3>Zero Build Step</h3>
-          <p>No webpack, no bundler. Just files that run.</p>
+          <p>No webpack. No bundler. No transpiler config hell. Just files that run.</p>
         </div>
-        <div class="feature">
-          <div class="feature-icon">🔧</div>
+        <div class="bento-card">
+          <div class="bento-icon">🔧</div>
           <h3>TypeScript Ready</h3>
-          <p>Use Bun runtime for native TypeScript on the fly.</p>
+          <p>Use Bun and get native TypeScript support. No compilation step needed.</p>
         </div>
       </div>
-    </section>
-
-    <!-- Agent Integration -->
-    <section>
-      <h2>How It <span class="gradient">Works</span></h2>
-      <p>When an agent launches a weblet, it injects context via <code>window.__AGENT_CONTEXT__</code>. The weblet reads this data and can emit events back. Simple JavaScript &mdash; no framework required.</p>
-<pre><code><span class="token-comment">// Check if launched by an agent</span>
-<span class="token-keyword">if</span> (window.__AGENT_CONTEXT__) {
-  <span class="token-keyword">const</span> { data, emit } = window.__AGENT_CONTEXT__;
-
-  <span class="token-comment">// Use data passed by the agent</span>
-  renderChart(data.items);
-
-  <span class="token-comment">// Emit events back to the agent</span>
-  emit(<span class="token-string">'item-selected'</span>, { id: selectedId });
-}</code></pre>
-    </section>
-
-    <!-- Quick Start -->
-    <section>
-      <div class="quickstart">
-        <h2>Quick Start</h2>
-        <p>Open Claude Code (or your AI assistant) and say:</p>
-<pre><code>Build me a weblet that converts markdown to HTML.
-Use browser runtime, no external dependencies.
-
-Read the weblet spec:
-https://raw.githubusercontent.com/jeffrschneider/weblet/master/specifications/Weblet-Specification-V1-0-0.md</code></pre>
-      </div>
-    </section>
-
-    <!-- For Platform Builders -->
-    <section class="platform-section">
-      <h2>For <span class="gradient">Platform Builders</span></h2>
-      <p>Building an app that generates weblets? Use the programmatic API:</p>
-<pre><code><span class="token-keyword">import</span> { validateWeblet, serveWeblet, captureScreenshots } <span class="token-keyword">from</span> <span class="token-string">'weblet'</span>;
-
-<span class="token-comment">// Validate, serve, and screenshot in a few lines</span>
-<span class="token-keyword">const</span> server = <span class="token-keyword">await</span> <span class="token-function">serveWeblet</span>(<span class="token-string">'./my-app'</span>);
-<span class="token-keyword">const</span> shots = <span class="token-keyword">await</span> <span class="token-function">captureScreenshots</span>(<span class="token-string">'./my-app'</span>, { output: <span class="token-string">'./previews'</span> });
-<span class="token-keyword">await</span> server.<span class="token-function">stop</span>();</code></pre>
-      <p><a href="integration.html" class="link"><strong>Integration Guide</strong> →</a></p>
-    </section>
-
-    <!-- Examples -->
-    <section>
-      <h2>Examples</h2>
-      <p>Learn by example. From minimal to full-featured:</p>
-      <div class="examples">
-        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/hello-world" class="example">
-          <div class="example-icon">👋</div>
-          <div class="example-content">
-            <h3>hello-world</h3>
-            <p>Simplest possible weblet. Two files.</p>
-          </div>
-        </a>
-        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/counter" class="example">
-          <div class="example-icon">🔢</div>
-          <div class="example-content">
-            <h3>counter</h3>
-            <p>TypeScript with Bun runtime.</p>
-          </div>
-        </a>
-        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/freecell" class="example">
-          <div class="example-icon">🃏</div>
-          <div class="example-content">
-            <h3>freecell</h3>
-            <p>Full card game with drag-drop, animations, i18n.</p>
-          </div>
-        </a>
-        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/budget-dashboard" class="example">
-          <div class="example-icon">📊</div>
-          <div class="example-content">
-            <h3>budget-dashboard</h3>
-            <p>Agent Context API demo.</p>
-          </div>
-        </a>
-        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/datawiz-agent" class="example">
-          <div class="example-icon">🧙</div>
-          <div class="example-content">
-            <h3>datawiz-agent</h3>
-            <p>Full agent with weblet routes + skills.</p>
-          </div>
-        </a>
-        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/static-app" class="example">
-          <div class="example-icon">🖼️</div>
-          <div class="example-content">
-            <h3>static-app</h3>
-            <p>Asset organization patterns.</p>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- Related -->
-    <section>
-      <h2>Related Projects</h2>
-      <div class="related-links">
-        <a href="https://agentskills.io" class="related-link">
-          <div class="related-link-icon">🎯</div>
-          <div>
-            <strong>Agent Skills</strong>
-            <p>Instruction packages for AI agents</p>
-          </div>
-        </a>
-        <a href="https://agents.md" class="related-link">
-          <div class="related-link-icon">📄</div>
-          <div>
-            <strong>AGENTS.md</strong>
-            <p>README format for AI coding agents</p>
-          </div>
-        </a>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="footer-links">
-      <a href="https://github.com/jeffrschneider/weblet">GitHub</a>
-      <a href="https://github.com/jeffrschneider/weblet/blob/master/specifications/Weblet-Specification-V1-0-0.md">Specification</a>
-      <a href="https://github.com/jeffrschneider/weblet/tree/master/examples">Examples</a>
-      <a href="https://github.com/jeffrschneider/weblet/issues">Issues</a>
     </div>
-    <p class="footer-copy">MIT License · Built for the AI agent ecosystem</p>
+  </section>
+
+  <!-- How it Works -->
+  <section class="how-it-works">
+    <div class="how-it-works-inner">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">Three steps to agent-powered UI.</h2>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>Create a weblet</h3>
+          <p>Make a folder with APP.md (manifest) and index.html (entry point). That's the minimum. Add whatever else you need.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>Agent launches it</h3>
+          <p>The agent serves your weblet and injects context—data, config, a callback channel. Your app reads it on load.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>Two-way communication</h3>
+          <p>Your UI displays the data, user interacts, and events flow back to the agent. The skill has a brain. Your weblet is its face.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Code Showcase -->
+  <section class="code-showcase">
+    <div class="code-showcase-inner">
+      <div class="section-label">Developer Experience</div>
+      <h2 class="section-title">Dead simple integration.</h2>
+      <p class="section-desc">Check if an agent launched you. If yes, use its data. If not, run standalone. That's the whole API.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dot"></div>
+          <div class="code-dot"></div>
+          <div class="code-dot"></div>
+          <span class="code-title">app.js</span>
+        </div>
+        <div class="code-content">
+<pre><span class="comment">// Check if launched by an agent</span>
+<span class="keyword">if</span> (window.<span class="property">__AGENT_CONTEXT__</span>) {
+  <span class="keyword">const</span> { data, emit } = window.<span class="property">__AGENT_CONTEXT__</span>;
+
+  <span class="comment">// Render with agent-provided data</span>
+  <span class="function">renderDashboard</span>(data.<span class="property">metrics</span>);
+
+  <span class="comment">// Send events back to the agent</span>
+  button.<span class="function">addEventListener</span>(<span class="string">'click'</span>, () => {
+    <span class="function">emit</span>(<span class="string">'export-requested'</span>, { format: <span class="string">'csv'</span> });
+  });
+} <span class="keyword">else</span> {
+  <span class="comment">// No agent? Load demo data, still works</span>
+  <span class="function">renderDashboard</span>(<span class="property">DEMO_DATA</span>);
+}</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-inner">
+      <h2>Start building in 30 seconds.</h2>
+      <p>Tell your AI assistant to build you a weblet. Point it at the spec. Watch it work.</p>
+      <div class="cta-code">
+        <code>Build me a weblet that visualizes JSON data as a chart.</code>
+      </div>
+      <div class="hero-buttons">
+        <a href="https://github.com/jeffrschneider/weblet/blob/master/specifications/Weblet-Specification-V1-0-0.md" class="btn btn-primary">
+          Read the Spec
+        </a>
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples" class="btn btn-secondary">
+          Browse Examples
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Examples -->
+  <section class="examples">
+    <div class="examples-inner">
+      <div class="section-label">Examples</div>
+      <h2 class="section-title">Learn by building.</h2>
+
+      <div class="examples-grid">
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/hello-world" class="example-card">
+          <h4>hello-world</h4>
+          <p>The absolute minimum. Two files.</p>
+        </a>
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/counter" class="example-card">
+          <h4>counter</h4>
+          <p>TypeScript + Bun runtime.</p>
+        </a>
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/freecell" class="example-card">
+          <h4>freecell</h4>
+          <p>Full game with drag-drop & i18n.</p>
+        </a>
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/budget-dashboard" class="example-card">
+          <h4>budget-dashboard</h4>
+          <p>Agent Context API in action.</p>
+        </a>
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/datawiz-agent" class="example-card">
+          <h4>datawiz-agent</h4>
+          <p>Full agent with weblet routes.</p>
+        </a>
+        <a href="https://github.com/jeffrschneider/weblet/tree/master/examples/static-app" class="example-card">
+          <h4>static-app</h4>
+          <p>Asset organization patterns.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-links">
+        <a href="https://github.com/jeffrschneider/weblet">GitHub</a>
+        <a href="https://github.com/jeffrschneider/weblet/blob/master/specifications/Weblet-Specification-V1-0-0.md">Specification</a>
+        <a href="integration.html">API</a>
+        <a href="https://github.com/jeffrschneider/weblet/issues">Issues</a>
+      </div>
+      <p class="footer-copy">MIT License</p>
+    </div>
   </footer>
 </body>
 </html>
