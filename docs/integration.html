@@ -6,36 +6,62 @@
   <title>Integration Guide - Weblet</title>
   <meta name="description" content="How to integrate weblet into your app or platform. Programmatic API for validation, serving, and screenshots.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #ffffff;
-      --bg-secondary: #f8fafc;
-      --text: #0f172a;
-      --text-secondary: #475569;
-      --muted: #64748b;
-      --border: #e2e8f0;
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
-      --code-bg: #1e293b;
-      --code-text: #e2e8f0;
-      --max-width: 800px;
-      --radius: 12px;
-      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+      /* Bold color palette */
+      --purple-400: #A855F7;
+      --purple-500: #8B5CF6;
+      --purple-600: #7C3AED;
+      --coral-400: #FB923C;
+      --coral-500: #F97316;
+      --cyan-400: #22D3EE;
+      --cyan-500: #06B6D4;
+      --emerald-500: #10B981;
+
+      /* Light theme */
+      --bg: #FAFAFA;
+      --bg-secondary: #FFFFFF;
+      --bg-card: rgba(255, 255, 255, 0.7);
+      --text: #1A1A2E;
+      --text-secondary: #4A4A68;
+      --text-muted: #6B7280;
+      --border: rgba(139, 92, 246, 0.15);
+      --border-strong: rgba(139, 92, 246, 0.3);
+
+      /* Gradients */
+      --gradient-primary: linear-gradient(135deg, var(--purple-500) 0%, var(--coral-500) 100%);
+      --gradient-secondary: linear-gradient(135deg, var(--cyan-500) 0%, var(--purple-500) 100%);
+      --gradient-text: linear-gradient(135deg, var(--purple-400) 0%, var(--coral-400) 50%, var(--cyan-400) 100%);
+
+      /* Effects */
+      --shadow-sm: 0 2px 8px rgba(139, 92, 246, 0.08);
+      --shadow-md: 0 4px 20px rgba(139, 92, 246, 0.12);
+      --shadow-lg: 0 8px 40px rgba(139, 92, 246, 0.16);
+      --glass: rgba(255, 255, 255, 0.8);
+
+      /* Layout */
+      --max-width: 900px;
+      --radius: 16px;
+      --radius-lg: 24px;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #0f172a;
-        --bg-secondary: #1e293b;
-        --text: #f1f5f9;
-        --text-secondary: #cbd5e1;
-        --muted: #94a3b8;
-        --border: #334155;
-        --accent: #60a5fa;
-        --accent-hover: #93c5fd;
-        --code-bg: #020617;
-        --code-text: #e2e8f0;
-        --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
+        --bg: #0A0A0F;
+        --bg-secondary: #12121A;
+        --bg-card: rgba(26, 26, 46, 0.6);
+        --text: #F8FAFC;
+        --text-secondary: #CBD5E1;
+        --text-muted: #94A3B8;
+        --border: rgba(139, 92, 246, 0.2);
+        --border-strong: rgba(139, 92, 246, 0.4);
+        --glass: rgba(26, 26, 46, 0.7);
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
       }
     }
 
@@ -46,16 +72,36 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.7;
       -webkit-font-smoothing: antialiased;
     }
 
+    /* Animated background */
+    .bg-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
     header {
+      background: var(--bg-secondary);
       border-bottom: 1px solid var(--border);
-      padding: 1.5rem;
+      padding: 1.25rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
     }
 
     .header-inner {
@@ -72,51 +118,81 @@
       gap: 0.75rem;
       text-decoration: none;
       color: var(--text);
-      font-weight: 600;
+      font-weight: 700;
       font-size: 1.25rem;
     }
 
-    .logo span {
-      font-size: 1.5rem;
+    .logo-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: var(--gradient-primary);
+      border-radius: 10px;
+      font-size: 1.25rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 0.5rem;
     }
 
     nav a {
-      color: var(--muted);
+      color: var(--text-muted);
       text-decoration: none;
-      margin-left: 1.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
       font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
     }
 
     nav a:hover {
-      color: var(--accent);
+      color: var(--purple-500);
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      nav a:hover {
+        color: var(--purple-400);
+      }
     }
 
     main {
       max-width: var(--max-width);
       margin: 0 auto;
-      padding: 3rem 1.5rem;
+      padding: 4rem 2rem;
     }
 
     h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 800;
       margin-bottom: 1rem;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
+    }
+
+    h1 .gradient {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .subtitle {
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       color: var(--text-secondary);
-      margin-bottom: 3rem;
+      margin-bottom: 4rem;
     }
 
     h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-top: 3rem;
-      margin-bottom: 1rem;
-      padding-top: 1rem;
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-top: 4rem;
+      margin-bottom: 1.25rem;
+      padding-top: 2rem;
       border-top: 1px solid var(--border);
+      letter-spacing: -0.02em;
     }
 
     h2:first-of-type {
@@ -125,121 +201,191 @@
       border-top: none;
     }
 
+    h2 .gradient {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
     h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-top: 2rem;
-      margin-bottom: 0.75rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
       color: var(--text);
     }
 
     p {
       color: var(--text-secondary);
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
+      font-size: 1.1rem;
     }
 
     code {
-      font-family: "SF Mono", "Fira Code", Consolas, monospace;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       font-size: 0.9em;
     }
 
     :not(pre) > code {
-      background: var(--bg-secondary);
-      padding: 0.2em 0.5em;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+      padding: 0.25em 0.6em;
       border-radius: 6px;
-      border: 1px solid var(--border);
+      color: var(--purple-500);
+      font-weight: 500;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :not(pre) > code {
+        color: var(--purple-400);
+      }
     }
 
     pre {
-      background: var(--code-bg);
-      color: var(--code-text);
-      padding: 1.5rem;
+      background: linear-gradient(180deg, #1A1A2E 0%, #0F0F1A 100%);
+      color: #E2E8F0;
+      padding: 2rem;
       border-radius: var(--radius);
       overflow-x: auto;
       margin: 1.5rem 0;
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      position: relative;
+    }
+
+    pre::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gradient-primary);
+      border-radius: var(--radius) var(--radius) 0 0;
     }
 
     pre code {
       background: none;
-      border: none;
+      color: inherit;
       padding: 0;
-      font-size: 0.9rem;
-      line-height: 1.6;
+      font-size: 0.95rem;
+      line-height: 1.7;
     }
 
-    .token-keyword { color: #c678dd; }
-    .token-string { color: #98c379; }
-    .token-comment { color: #5c6370; font-style: italic; }
-    .token-function { color: #61afef; }
-    .token-type { color: #e5c07b; }
+    .token-keyword { color: #C678DD; }
+    .token-string { color: #98C379; }
+    .token-comment { color: #5C6370; font-style: italic; }
+    .token-function { color: #61AFEF; }
+    .token-type { color: #E5C07B; }
 
     ul, ol {
-      margin: 1rem 0 1rem 1.5rem;
+      margin: 1.25rem 0 1.25rem 1.5rem;
       color: var(--text-secondary);
     }
 
     li {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
+      font-size: 1.05rem;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       margin: 1.5rem 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
     }
 
     th, td {
       text-align: left;
-      padding: 0.75rem 1rem;
+      padding: 1rem 1.25rem;
       border-bottom: 1px solid var(--border);
     }
 
     th {
       font-weight: 600;
       color: var(--text);
-      background: var(--bg-secondary);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%);
     }
 
     td {
       color: var(--text-secondary);
+      background: var(--glass);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
     }
 
     .note {
-      background: var(--bg-secondary);
-      border-left: 4px solid var(--accent);
-      padding: 1rem 1.25rem;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%);
+      border-left: 4px solid var(--purple-500);
+      padding: 1.25rem 1.5rem;
       border-radius: 0 var(--radius) var(--radius) 0;
-      margin: 1.5rem 0;
+      margin: 2rem 0;
     }
 
     .note p {
       margin: 0;
+      font-size: 1rem;
+    }
+
+    .note strong {
+      color: var(--purple-500);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .note strong {
+        color: var(--purple-400);
+      }
     }
 
     footer {
       border-top: 1px solid var(--border);
-      padding: 2rem 1.5rem;
+      padding: 2.5rem 2rem;
       text-align: center;
-      color: var(--muted);
-      font-size: 0.9rem;
+      background: var(--bg-secondary);
     }
 
     footer a {
-      color: var(--muted);
+      color: var(--text-muted);
       text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
     }
 
     footer a:hover {
-      color: var(--accent);
+      color: var(--purple-500);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      footer a:hover {
+        color: var(--purple-400);
+      }
+    }
+
+    .footer-copy {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
     }
   </style>
 </head>
 <body>
+  <div class="bg-grid"></div>
+
   <header>
     <div class="header-inner">
       <a href="/" class="logo">
-        <span>📦</span> Weblet
+        <div class="logo-icon">📦</div>
+        Weblet
       </a>
       <nav>
         <a href="https://github.com/jeffrschneider/weblet">GitHub</a>
@@ -250,7 +396,7 @@
   </header>
 
   <main>
-    <h1>Integration Guide</h1>
+    <h1><span class="gradient">Integration</span> Guide</h1>
     <p class="subtitle">How to integrate weblet into your app or platform.</p>
 
     <h2>Installation</h2>
@@ -259,7 +405,7 @@
 <span class="token-comment"># or</span>
 npm install weblet</code></pre>
 
-    <h2>Quick Example</h2>
+    <h2>Quick <span class="gradient">Example</span></h2>
     <p>Here's a complete example of validating a weblet, serving it, and capturing screenshots:</p>
 <pre><code><span class="token-keyword">import</span> {
   validateWeblet,
@@ -293,7 +439,7 @@ console.log(<span class="token-string">'Saved:'</span>, screenshots.files);
 <span class="token-comment">// 5. Clean up</span>
 <span class="token-keyword">await</span> server.<span class="token-function">stop</span>();</code></pre>
 
-    <h2>API Reference</h2>
+    <h2>API <span class="gradient">Reference</span></h2>
 
     <h3>validateWeblet(path)</h3>
     <p>Parse and validate a weblet's APP.md manifest.</p>
@@ -342,7 +488,7 @@ console.log(<span class="token-string">'Saved:'</span>, screenshots.files);
 <span class="token-comment">// result.outputDir: string</span>
 <span class="token-comment">// result.appName: string</span></code></pre>
 
-    <h2>Screenshot Options</h2>
+    <h2>Screenshot <span class="gradient">Options</span></h2>
 
     <h3>Viewport Presets</h3>
     <table>
@@ -373,7 +519,7 @@ console.log(<span class="token-string">'Saved:'</span>, screenshots.files);
       <p><strong>Note:</strong> Animated GIF generation requires ffmpeg to be installed on your system. Without ffmpeg, the feature will log a warning and skip GIF creation.</p>
     </div>
 
-    <h2>Use Cases</h2>
+    <h2>Use <span class="gradient">Cases</span></h2>
 
     <h3>App Builder Platform</h3>
     <p>A platform that lets users describe apps, generates weblets, and shows previews:</p>
@@ -439,7 +585,7 @@ console.log(<span class="token-string">'Saved:'</span>, screenshots.files);
 
 console.log(<span class="token-string">'Weblet is valid!'</span>);</code></pre>
 
-    <h2>TypeScript Types</h2>
+    <h2>TypeScript <span class="gradient">Types</span></h2>
     <p>All types are exported for TypeScript users:</p>
 <pre><code><span class="token-keyword">import</span> <span class="token-keyword">type</span> {
   <span class="token-type">ServeOptions</span>,
@@ -453,9 +599,12 @@ console.log(<span class="token-string">'Weblet is valid!'</span>);</code></pre>
   </main>
 
   <footer>
-    <a href="/">Home</a> ·
-    <a href="https://github.com/jeffrschneider/weblet">GitHub</a> ·
-    <a href="https://github.com/jeffrschneider/weblet/issues">Issues</a>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="https://github.com/jeffrschneider/weblet">GitHub</a>
+      <a href="https://github.com/jeffrschneider/weblet/issues">Issues</a>
+    </div>
+    <p class="footer-copy">MIT License · Built for the AI agent ecosystem</p>
   </footer>
 </body>
 </html>

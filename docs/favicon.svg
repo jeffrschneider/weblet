@@ -1,12 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
     <linearGradient id="boxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#3b82f6"/>
-      <stop offset="100%" style="stop-color:#1d4ed8"/>
+      <stop offset="0%" style="stop-color:#8B5CF6"/>
+      <stop offset="100%" style="stop-color:#7C3AED"/>
     </linearGradient>
     <linearGradient id="topGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#60a5fa"/>
-      <stop offset="100%" style="stop-color:#3b82f6"/>
+      <stop offset="0%" style="stop-color:#A855F7"/>
+      <stop offset="100%" style="stop-color:#8B5CF6"/>
+    </linearGradient>
+    <linearGradient id="flapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F97316"/>
+      <stop offset="100%" style="stop-color:#FB923C"/>
     </linearGradient>
   </defs>
   <!-- Box body -->
@@ -14,11 +18,11 @@
   <!-- Box top -->
   <path d="M8 24 L32 12 L56 24 L32 36 Z" fill="url(#topGrad)"/>
   <!-- Box left side highlight -->
-  <path d="M8 24 L32 36 L32 60 L8 48 Z" fill="#2563eb" opacity="0.8"/>
+  <path d="M8 24 L32 36 L32 60 L8 48 Z" fill="#7C3AED" opacity="0.85"/>
   <!-- Box right side -->
-  <path d="M56 24 L32 36 L32 60 L56 48 Z" fill="#1e40af" opacity="0.9"/>
+  <path d="M56 24 L32 36 L32 60 L56 48 Z" fill="#6D28D9" opacity="0.9"/>
   <!-- Open flap left -->
-  <path d="M8 24 L20 8 L32 16 L32 12 Z" fill="#93c5fd"/>
+  <path d="M8 24 L20 8 L32 16 L32 12 Z" fill="url(#flapGrad)"/>
   <!-- Open flap right -->
-  <path d="M56 24 L44 8 L32 16 L32 12 Z" fill="#60a5fa"/>
+  <path d="M56 24 L44 8 L32 16 L32 12 Z" fill="#FB923C"/>
 </svg>
